@@ -97,6 +97,37 @@ int LoadTexture(const char *filename,int alpha)
     return (num_texture); // Returns the current texture OpenGL ID
 }
 int test,ground,wall;
+
+void ResetLightPosition(float x, float y, float z)
+{
+	GLfloat position[] = {x, y, z, 1.0f};
+	glLightfv(GL_LIGHT0, GL_POSITION, position); // Position The Light
+}
+
+void ResetLightColor(float r, float g, float b)
+{
+	GLfloat color[] = {r, g, b, 1.0f};
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, color); // Light color
+}
+
+void SetupSceneLight()
+{
+	GLfloat light_ambient[] = { 0.2, 0.2, 0.2, 1};
+	GLfloat light_diffuse[] = { 1, 1, 1, 1 };
+	GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
+	GLfloat direction[] = { 0, 0, -1};
+
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, direction);
+	ResetLightColor(1.0f, 1.0f, 1.0f); // white light
+	ResetLightPosition(0, 0, 10); // in front of the scene
+	glEnable(GL_LIGHT0);
+}
+
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
@@ -106,9 +137,11 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
 	glEnable(GL_TEXTURE_2D);
-	test = LoadTexture("rxr.bmp",100);
+	//test = LoadTexture("rxr.bmp",100);
 	ground = LoadTexture("ground.bmp",100);
 	wall = LoadTexture("wall.bmp",100);
+
+	SetupSceneLight();
 	return TRUE;										// Initialization Went OK
 }
 
@@ -183,16 +216,16 @@ void skybox(float x,float y,float z,float d,float dz){
 float playerX=1010,playerY=1010,playerZ=0.2,Diff=0,Diff2=0,cameraX=0,cameraY=0,cameraZ=0;
 void cameraMovement(){
 	if (keys['W']){
-		playerX += 0.1;
+		playerX += 1;
 	}
 	if (keys['S']){
-		playerX -= 0.1;
+		playerX -= 1;
 	}
 	if (keys['D']){
-		playerY -= 0.1;
+		playerY -= 1;
 	}
 	if (keys['A']){
-		playerY += 0.1;
+		playerY += 1;
 	}
 	if (keys[VK_LEFT]){
 		Diff += 5;
@@ -201,10 +234,10 @@ void cameraMovement(){
 		Diff -= 5;
 	}
 	if (keys[VK_UP]){
-		Diff2++;
+		Diff2 += 5;
 	}
 	if (keys[VK_DOWN]){
-		Diff2--;
+		Diff2 -= 5;
 	}
 	if (keys['I']){
 		playerZ *= -1;
@@ -212,28 +245,59 @@ void cameraMovement(){
 	cameraX = playerX + 5 * cos(Diff * 3.1415 / 180);
 	cameraY = playerY + 5 * sin(Diff * 3.1415 / 180);
 	cameraZ = playerZ + 5 * sin(Diff2 * 3.1415 / 180);
+	gluLookAt(playerX,playerY,playerZ,cameraX,cameraY,cameraZ,0,0,1);
 }
-float rot=0;
-void drawFan(float x, float y, float z, float r){
+float rot=0,A=0.1;
+void drawFan(float x, float y, float z){
 	for (int i = 0; i < 360; i += 60){
 		glPushMatrix();
 		glTranslatef(x,y,z);
 		glRotatef(rot+i,0,0,1);
 		glTranslatef(-x,-y,-z);
-		rot++;
+		if(keys['E']){
+			A += 0.1;
+		}
+		if(keys['Q']){
+			A -= 0.1;
+		}
+		if (A<0)
+			A=0;
+		rot += A;
+		glColor3f(1,1,1);
 		glBegin(GL_QUADS);
-		glVertex3f(x,y,z);
-		glVertex3f(x+2,y,z);
-		glVertex3f(x+2,y+10,z);
-		glVertex3f(x,y+10,z);
+		glVertex3f(x,y,z+1);
+		glVertex3f(x+2,y,z-1);
+		glVertex3f(x+2,y+10,z-1);
+		glVertex3f(x,y+10,z+1);
 		glEnd();
 		glPopMatrix();
 	}
 }
+
+void lightManager(float x, float y, float z){
+	glTranslatef(x,y,z);
+	ResetLightPosition(0,0,0);
+	glTranslatef(-x,-y,-z);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	if ((int)rot%60 < 20){
+		GLfloat light_diffuse[] = { 0.1, 0.1, 0.1, 1 };
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+	}else{
+	GLfloat light_diffuse[] = { 0.8, 0.8, 0.8, 1 };
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+	}
+	if (keys['B']){
+		glDisable(GL_LIGHTING);
+	}
+
+}
 void CPUroom(){
+
+	lightManager(1010,1010,11);
 	drawGround(1000,1000,0,20);
 	skybox(1000,1000,0,20,10);
-	drawFan(1010,1010,10,0);
+	drawFan(1010,1010,10);
 
 
 }
@@ -246,9 +310,6 @@ void DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	glPushMatrix();
 
 	cameraMovement();
-	
-
-	gluLookAt(playerX,playerY,playerZ,cameraX,cameraY,cameraZ,0,0,1);
 
 	CPUroom();
 
@@ -564,7 +625,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 	}
 
 	// Create Our OpenGL Window
-	if (!CreateGLWindow("RedWn's Window",800,600,16,fullscreen))
+	if (!CreateGLWindow("RedWn's Window",1280,720,16,fullscreen))
 	{
 		return 0;									// Quit If Window Was Not Created
 	}
