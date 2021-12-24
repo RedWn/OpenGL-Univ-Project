@@ -3,7 +3,6 @@
 #include <gl\gl.h>			// Header File For The OpenGL32 Library
 #include <gl\glu.h>			// Header File For The GLu32 Library
 #include <cmath>
-#include <iostream>
 
 
 HDC			hDC=NULL;		// Private GDI Device Context
@@ -97,7 +96,7 @@ int LoadTexture(const char *filename,int alpha)
 
     return (num_texture); // Returns the current texture OpenGL ID
 }
-int test,front,back,left,right,top;
+int test,ground,wall;
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
@@ -108,146 +107,17 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
 	glEnable(GL_TEXTURE_2D);
 	test = LoadTexture("rxr.bmp",100);
-	front = LoadTexture("rxr.bmp",100);
-	back = LoadTexture("rxr.bmp",100);
-	top = LoadTexture("rxr.bmp",100);
-	left = LoadTexture("rxr.bmp",100);
-	right = LoadTexture("rxr.bmp",100);
+	ground = LoadTexture("ground.bmp",100);
+	wall = LoadTexture("wall.bmp",100);
 	return TRUE;										// Initialization Went OK
 }
 
 float angle=0;
-
-void skybox()
-{
-	glColor3f(1,1,1);
-	glBindTexture(GL_TEXTURE_2D, front);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3d(-90, -90, -90);
-	glTexCoord2d(1, 0);
-	glVertex3d(90, -90, -90);
-	glTexCoord2d(1, 1);
-	glVertex3d(90, 90, -90);
-	glTexCoord2d(0, 1);
-	glVertex3d(-90, 90, -90);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D, back);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3d(-90, -90, 90);
-	glTexCoord2d(1, 0);
-	glVertex3d(90, -90, 90);
-	glTexCoord2d(1, 1);
-	glVertex3d(90, 90, 90);
-	glTexCoord2d(0, 1);
-	glVertex3d(-90, 90, 90);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D, left);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3d(-90, -90, 90);
-	glTexCoord2d(1, 0);
-	glVertex3d(-90, -90, -90);
-	glTexCoord2d(1, 1);
-	glVertex3d(-90, 90, -90);
-	glTexCoord2d(0, 1);
-	glVertex3d(-90, 90, 90);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D, right);
-	glBegin(GL_QUADS);
-	glTexCoord2d(1, 0);
-	glVertex3d(90, -90, 90);
-	glTexCoord2d(0, 0);
-	glVertex3d(90, -90, -90);
-	glTexCoord2d(0, 1);
-	glVertex3d(90, 90, -90);
-	glTexCoord2d(1, 1);
-	glVertex3d(90, 90, 90);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D, top);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3d(-90, 90, -90);
-	glTexCoord2d(1, 0);
-	glVertex3d(90, 90, -90);
-	glTexCoord2d(1, 1);
-	glVertex3d(90, 90, 90);
-	glTexCoord2d(0, 1);
-	glVertex3d(-90, 90, 90);
-	glEnd();
-}
-
-void drawCube(){
-	int Z = 0;
-	//glPushMatrix();
-	//glTranslatef(0,0,-6);
-
-	glColor3f(1,0,0);
-	glBegin(GL_QUADS);
-	glVertex3f(0,0,0);
-	glVertex3f(0,1,0);
-	glVertex3f(1,1,0);
-	glVertex3f(1,0,0);
-	glEnd();
-
-	glColor3f(0,1,0);
-	glBegin(GL_QUADS);
-	glVertex3f(0,0,-1);
-	glVertex3f(0,1,-1);
-	glVertex3f(1,1,-1);
-	glVertex3f(1,0,-1);
-	glEnd();
-
-	glColor3f(0,0,1);
-	glBegin(GL_QUADS);
-	glVertex3f(0,0,0);
-	glVertex3f(0,0,-1);
-	glVertex3f(1,0,-1);
-	glVertex3f(1,0,0);
-	glEnd();
-
-	glColor3f(1,1,1);
-	glBegin(GL_QUADS);
-	glVertex3f(0,1,0);
-	glVertex3f(0,1,-1);
-	glVertex3f(1,1,-1);
-	glVertex3f(1,1,0);
-	glEnd();
-
-	glColor3f(1,1,0);
-	glBegin(GL_QUADS);
-	glVertex3f(0,0,0);
-	glVertex3f(0,0,-1);
-	glVertex3f(0,1,-1);
-	glVertex3f(0,1,0);
-	glEnd();
-
-	glColor3f(0,1,1);
-	glBegin(GL_QUADS);
-	glVertex3f(1,0,0);
-	glVertex3f(1,0,-1);
-	glVertex3f(1,1,-1);
-	glVertex3f(1,1,0);
-	glEnd();
-
-	glFlush();
-
-	//glPopMatrix();
-}
-void drawCircle(){
-	for (float i=0;i<(2*3.14);i++){
-			
-	}
-}
+	
 int dx=0,dy=0,dz=0;
-void drawSquare(int x,int y,int z,int d){
+void drawGround(int x,int y,int z,int d){
 	glColor3f(0.5,0.5,0.5);
-	glBindTexture(GL_TEXTURE_2D,test);
+	glBindTexture(GL_TEXTURE_2D,ground);
 	glBegin(GL_QUADS);
 	glTexCoord2d(0, 0);
 	glVertex3f(x,y,z);
@@ -260,54 +130,57 @@ void drawSquare(int x,int y,int z,int d){
 	glEnd();
 
 }
+void skybox(float x,float y,float z,float d,float dz){
 
-void drawRedCube(float x,float y,float z,float d){
-
-	glColor3f(1,0,0);
-
+	glBindTexture(GL_TEXTURE_2D,wall);
 	glBegin(GL_QUADS);
-	glVertex3f(x,y,z);
-	glVertex3f(x+d,y,z);
-	glVertex3f(x+d,y+d,z);
+	glTexCoord2d(0, 0);
 	glVertex3f(x,y+d,z);
-	glEnd();
-
-	glBegin(GL_QUADS);
-	glVertex3f(x,y+d,z);
+	glTexCoord2d(1, 0);
 	glVertex3f(x+d,y+d,z);
-	glVertex3f(x+d,y+d,z+d);
-	glVertex3f(x,y+d,z+d);
+	glTexCoord2d(1, 1);
+	glVertex3f(x+d,y+d,z+dz);
+	glTexCoord2d(0, 1);
+	glVertex3f(x,y+d,z+dz);
 	glEnd();
 
+	glBindTexture(GL_TEXTURE_2D,wall);
 	glBegin(GL_QUADS);
+	glTexCoord2d(0, 0);
 	glVertex3f(x,y,z);
+	glTexCoord2d(1, 0);
 	glVertex3f(x+d,y,z);
-	glVertex3f(x+d,y+d,z+d);
-	glVertex3f(x,y+d,z+d);
+	glTexCoord2d(1, 1);
+	glVertex3f(x+d,y,z+dz);
+	glTexCoord2d(0, 1);
+	glVertex3f(x,y,z+dz);
 	glEnd();
 
+	glBindTexture(GL_TEXTURE_2D,wall);
 	glBegin(GL_QUADS);
-	glVertex3f(x,y,z+d);
-	glVertex3f(x+d,y,z+d);
-	glVertex3f(x+d,y+d,z+d);
-	glVertex3f(x,y+d,z+d);
-	glEnd();
-
-	glBegin(GL_QUADS);
+	glTexCoord2d(0, 0);
 	glVertex3f(x,y,z);
+	glTexCoord2d(1, 0);
 	glVertex3f(x,y+d,z);
-	glVertex3f(x,y+d,z+d);
-	glVertex3f(x,y,z+d);
+	glTexCoord2d(1, 1);
+	glVertex3f(x,y+d,z+dz);
+	glTexCoord2d(0, 1);
+	glVertex3f(x,y,z+dz);
 	glEnd();
 
+	glBindTexture(GL_TEXTURE_2D,wall);
 	glBegin(GL_QUADS);
+	glTexCoord2d(0, 0);
 	glVertex3f(x+d,y,z);
+	glTexCoord2d(1, 0);
 	glVertex3f(x+d,y+d,z);
-	glVertex3f(x+d,y+d,z+d);
-	glVertex3f(x+d,y,z+d);
+	glTexCoord2d(1, 1);
+	glVertex3f(x+d,y+d,z+dz);
+	glTexCoord2d(0, 1);
+	glVertex3f(x+d,y,z+dz);
 	glEnd();
 }
-float playerX=0,playerY=0,playerZ=0.2,Diff=0,cameraX=0,cameraY=0,cameraZ=0;
+float playerX=1010,playerY=1010,playerZ=0.2,Diff=0,Diff2=0,cameraX=0,cameraY=0,cameraZ=0;
 void cameraMovement(){
 	if (keys['W']){
 		playerX += 0.1;
@@ -327,11 +200,42 @@ void cameraMovement(){
 	if (keys[VK_RIGHT]){
 		Diff -= 5;
 	}
+	if (keys[VK_UP]){
+		Diff2++;
+	}
+	if (keys[VK_DOWN]){
+		Diff2--;
+	}
 	if (keys['I']){
 		playerZ *= -1;
 	}
 	cameraX = playerX + 5 * cos(Diff * 3.1415 / 180);
 	cameraY = playerY + 5 * sin(Diff * 3.1415 / 180);
+	cameraZ = playerZ + 5 * sin(Diff2 * 3.1415 / 180);
+}
+float rot=0;
+void drawFan(float x, float y, float z, float r){
+	for (int i = 0; i < 360; i += 60){
+		glPushMatrix();
+		glTranslatef(x,y,z);
+		glRotatef(rot+i,0,0,1);
+		glTranslatef(-x,-y,-z);
+		rot++;
+		glBegin(GL_QUADS);
+		glVertex3f(x,y,z);
+		glVertex3f(x+2,y,z);
+		glVertex3f(x+2,y+10,z);
+		glVertex3f(x,y+10,z);
+		glEnd();
+		glPopMatrix();
+	}
+}
+void CPUroom(){
+	drawGround(1000,1000,0,20);
+	skybox(1000,1000,0,20,10);
+	drawFan(1010,1010,10,0);
+
+
 }
 void DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {
@@ -344,15 +248,10 @@ void DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	cameraMovement();
 	
 
-	gluLookAt(playerX,playerY,playerZ,cameraX,cameraY,playerZ,0,0,1);
+	gluLookAt(playerX,playerY,playerZ,cameraX,cameraY,cameraZ,0,0,1);
 
-	drawSquare(-1,-1,0,10);
-	//skybox();
-	
-	//drawRedCube(playerX,playerY+5,playerZ,1);
-	for (int i =0; i<5;i++){
-		drawRedCube(i,i,0,0.5);
-	}
+	CPUroom();
+
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	
