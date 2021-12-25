@@ -137,9 +137,10 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
 	glEnable(GL_TEXTURE_2D);
-	//test = LoadTexture("rxr.bmp",100);
-	ground = LoadTexture("ground.bmp",100);
+	test = LoadTexture("rxr.bmp",100);
+	ground = LoadTexture("down.bmp",100);
 	wall = LoadTexture("wall.bmp",100);
+
 
 	SetupSceneLight();
 	return TRUE;										// Initialization Went OK
@@ -152,13 +153,13 @@ void drawGround(int x,int y,int z,int d){
 	glColor3f(0.5,0.5,0.5);
 	glBindTexture(GL_TEXTURE_2D,ground);
 	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3f(x,y,z);
-	glTexCoord2d(1, 0);
-	glVertex3f(x+d,y,z);
-	glTexCoord2d(1, 1);
-	glVertex3f(x+d,y+d,z);
 	glTexCoord2d(0, 1);
+	glVertex3f(x,y,z);
+	glTexCoord2d(0, 0);
+	glVertex3f(x+d,y,z);
+	glTexCoord2d(1, 0);
+	glVertex3f(x+d,y+d,z);
+	glTexCoord2d(1, 1);
 	glVertex3f(x,y+d,z);
 	glEnd();
 
@@ -240,7 +241,7 @@ void cameraMovement(){
 		Diff2 -= 5;
 	}
 	if (keys['I']){
-		playerZ *= -1;
+		playerZ = 10;
 	}
 	cameraX = playerX + 5 * cos(Diff * 3.1415 / 180);
 	cameraY = playerY + 5 * sin(Diff * 3.1415 / 180);
@@ -248,7 +249,30 @@ void cameraMovement(){
 	gluLookAt(playerX,playerY,playerZ,cameraX,cameraY,cameraZ,0,0,1);
 }
 float rot=0,A=0.1;
+auto quadr=gluNewQuadric();
+
+void drawCircle(float x, float y, float z, float r){
+	float dx=0,dy=0;
+	glBegin(GL_TRIANGLE_FAN);
+	for (float i=0.0f;i <= (2*3.15f*r);i += 0.01f){
+		glVertex3f(x,y,z);
+		glVertex3f(dx,dy,z);
+		dx = r * cos(i);
+		dy = r * sin(i);
+		glVertex3f(dx,dy,z);
+	}
+	glEnd();
+}
 void drawFan(float x, float y, float z){
+	glTranslatef(1010,1010,9);
+	glDisable(GL_TEXTURE_2D);
+	glColor3f(0.5,0.5,0.5);
+	for (float i=0;i<2;i+=0.01){
+	drawCircle(0,0,i,2);
+	}
+	//gluCylinder(quadr,2,2,2,100,100);
+	glEnable(GL_TEXTURE_2D);
+	glTranslatef(-1010,-1010,-9);
 	for (int i = 0; i < 360; i += 60){
 		glPushMatrix();
 		glTranslatef(x,y,z);
@@ -263,43 +287,65 @@ void drawFan(float x, float y, float z){
 		if (A<0)
 			A=0;
 		rot += A;
-		glColor3f(1,1,1);
+		glDisable(GL_TEXTURE_2D);
+		glColor3f(0.5,0.5,0.5);
 		glBegin(GL_QUADS);
 		glVertex3f(x,y,z+1);
 		glVertex3f(x+2,y,z-1);
 		glVertex3f(x+2,y+10,z-1);
 		glVertex3f(x,y+10,z+1);
 		glEnd();
+		glEnable(GL_TEXTURE_2D);
 		glPopMatrix();
 	}
 }
 
+void drawBlades(float x,float y,float z){
+	for (int i=0;i<360;i+=18){
+		glPushMatrix();
+		glTranslatef(x,y,z);
+		glRotatef(i,0,0,1);
+		glTranslatef(-x,-y,-z);
+		glDisable(GL_TEXTURE_2D);
+		glColor3f(1,1,1);
+		glBegin(GL_QUADS);
+		glVertex3f(x,y+5,z);
+		glVertex3f(x,y+9,z);
+		glVertex3f(x,y+9,z-10);
+		glVertex3f(x,y+5,z-10);
+		glEnd();
+		glEnable(GL_TEXTURE_2D);
+		glPopMatrix();
+	}
+}
 void lightManager(float x, float y, float z){
+	GLfloat light_diffuseH[] = { 1, 1, 1, 1 };
+	GLfloat light_diffuseL[] = { 0.1, 0.1, 0.1, 1 };
+	GLfloat light_diffuseR[] = { 0.8, 0, 0, 1 };
 	glTranslatef(x,y,z);
 	ResetLightPosition(0,0,0);
 	glTranslatef(-x,-y,-z);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
+	ResetLightColor(1,1,1);
 	if ((int)rot%60 < 20){
-		GLfloat light_diffuse[] = { 0.1, 0.1, 0.1, 1 };
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuseL);
 	}else{
-	GLfloat light_diffuse[] = { 0.8, 0.8, 0.8, 1 };
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuseH);
 	}
 	if (keys['B']){
 		glDisable(GL_LIGHTING);
 	}
-
+	if (A < 0.1){
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuseR);
+	}
 }
 void CPUroom(){
-
-	lightManager(1010,1010,11);
+	lightManager(1010,1010,10);
 	drawGround(1000,1000,0,20);
 	skybox(1000,1000,0,20,10);
 	drawFan(1010,1010,10);
-
-
+	drawBlades(1010,1010,5);
 }
 void DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {
