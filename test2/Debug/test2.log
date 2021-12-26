@@ -1,31 +1,47 @@
-﻿Build started 2021-12-25 7:12:23 PM.
-     1>Project "C:\Users\ASUS\Documents\Visual Studio 2012\Projects\test2\test2\test2.vcxproj" on node 2 (Build target(s)).
+﻿Build started 12/26/2021 10:00:53 PM.
+     1>Project "D:\ITE\OpenGl\Projects\OpenGL-Univ-Project\test2\test2.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         D:\Prog\Visual Studio\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Source.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Source.cpp
          Source.cpp
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(51): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 d:\prog\visual studio\vc\include\stdio.h(218) : see declaration of 'fopen'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(115): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(157): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(159): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(161): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(163): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(217): warning C4305: 'initializing' : truncation from 'double' to 'float'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(246): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(247): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(248): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(251): warning C4305: 'initializing' : truncation from 'double' to 'float'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(270): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(282): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(285): warning C4305: '-=' : truncation from 'double' to 'float'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(307): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(323): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(324): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(51): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\stdio.h(218) : see declaration of 'fopen'
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(116): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(166): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(168): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(170): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(172): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(228): warning C4305: 'initializing' : truncation from 'double' to 'float'
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(262): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(263): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(264): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(267): warning C4305: 'initializing' : truncation from 'double' to 'float'
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(286): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(298): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(301): warning C4305: '-=' : truncation from 'double' to 'float'
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(323): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(339): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(340): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(377): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(379): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(381): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(383): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(394): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(396): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(398): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(400): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(407): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(428): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(429): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(433): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(438): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(442): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(446): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>d:\ite\opengl\projects\opengl-univ-project\test2\source.cpp(457): warning C4305: 'argument' : truncation from 'double' to 'float'
        Link:
-         D:\Prog\Visual Studio\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ASUS\Documents\Visual Studio 2012\Projects\test2\Debug\test2.exe" /INCREMENTAL /NOLOGO GLAUX.lib GLU32.lib glut.lib OPENGL32.lib glut32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\ASUS\Documents\Visual Studio 2012\Projects\test2\Debug\test2.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ASUS\Documents\Visual Studio 2012\Projects\test2\Debug\test2.lib" /MACHINE:X86 Debug\Source.obj
-         test2.vcxproj -> C:\Users\ASUS\Documents\Visual Studio 2012\Projects\test2\Debug\test2.exe
-     1>Done Building Project "C:\Users\ASUS\Documents\Visual Studio 2012\Projects\test2\test2\test2.vcxproj" (Build target(s)).
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\ITE\OpenGl\Projects\OpenGL-Univ-Project\Debug\test2.exe" /INCREMENTAL /NOLOGO GLAUX.lib GLU32.lib glut.lib OPENGL32.lib glut32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\ITE\OpenGl\Projects\OpenGL-Univ-Project\Debug\test2.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\ITE\OpenGl\Projects\OpenGL-Univ-Project\Debug\test2.lib" /MACHINE:X86 Debug\Source.obj
+         test2.vcxproj -> D:\ITE\OpenGl\Projects\OpenGL-Univ-Project\Debug\test2.exe
+     1>Done Building Project "D:\ITE\OpenGl\Projects\OpenGL-Univ-Project\test2\test2.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:11.03
+Time Elapsed 00:00:02.15
