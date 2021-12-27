@@ -217,16 +217,20 @@ void skybox(float x,float y,float z,float d,float dz){
 float playerX=1010,playerY=1010,playerZ=0.2,Diff=0,Diff2=0,cameraX=0,cameraY=0,cameraZ=0;
 void cameraMovement(){
 	if (keys['W']){
-		playerX += 1;
+		playerX += 1 * cos(Diff * 3.1415 / 180); 
+		playerY += 1 * sin(Diff * 3.1415 / 180);
 	}
 	if (keys['S']){
-		playerX -= 1;
+		playerX -= 1 * cos(Diff * 3.1415 / 180); 
+		playerY -= 1 * sin(Diff * 3.1415 / 180);
 	}
 	if (keys['D']){
-		playerY -= 1;
+		playerX -= 1 * sin(Diff * 3.1415 / 180);
+		playerY -= 1 * cos(Diff * 3.1415 / 180);
 	}
 	if (keys['A']){
-		playerY += 1;
+		playerX += 1 * sin(Diff * 3.1415 / 180); 
+		playerY += 1 * cos(Diff * 3.1415 / 180);
 	}
 	if (keys[VK_LEFT]){
 		Diff += 5;
@@ -270,7 +274,6 @@ void drawFan(float x, float y, float z){
 	for (float i=0;i<2;i+=0.01){
 	drawCircle(0,0,i,2);
 	}
-	//gluCylinder(quadr,2,2,2,100,100);
 	glEnable(GL_TEXTURE_2D);
 	glTranslatef(-1010,-1010,-9);
 	for (int i = 0; i < 360; i += 60){
@@ -345,7 +348,7 @@ void CPUroom(){
 	drawGround(1000,1000,0,20);
 	skybox(1000,1000,0,20,10);
 	drawFan(1010,1010,10);
-	drawBlades(1010,1010,5);
+	drawBlades(1010,1010,8);
 }
 void DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {
