@@ -3,6 +3,7 @@
 #include <gl\gl.h>			// Header File For The OpenGL32 Library
 #include <gl\glu.h>			// Header File For The GLu32 Library
 #include <cmath>
+#include "ant.h"
 
 
 HDC			hDC=NULL;		// Private GDI Device Context
@@ -146,9 +147,11 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	return TRUE;										// Initialization Went OK
 }
 
-float angle=0;
-	
-int dx=0,dy=0,dz=0;
+float rot=0,A=0.1;
+auto quadr=gluNewQuadric();
+Ant ants[] = {Ant(1000+rand()%20,1000+rand()%20,0.2), Ant(1000+rand()%20,1000+rand()%20,0.2), Ant(1000+rand()%20,1000+rand()%20,0.2)};
+float playerX=1010,playerY=1010,playerZ=0.2,Diff=0,Diff2=0,cameraX=0,cameraY=0,cameraZ=0;
+
 void drawGround(int x,int y,int z,int d){
 	glColor3f(0.5,0.5,0.5);
 	glBindTexture(GL_TEXTURE_2D,ground);
@@ -163,6 +166,80 @@ void drawGround(int x,int y,int z,int d){
 	glVertex3f(x,y+d,z);
 	glEnd();
 
+}
+void drawCube(float x,float y,float z,float dx,float dy,float dz){
+
+	glBindTexture(GL_TEXTURE_2D,test);
+	glBegin(GL_QUADS);
+	glTexCoord2d(0, 0);
+	glVertex3f(x,y+dy,z);
+	glTexCoord2d(1, 0);
+	glVertex3f(x+dx,y+dy,z);
+	glTexCoord2d(1, 1);
+	glVertex3f(x+dx,y+dy,z+dz);
+	glTexCoord2d(0, 1);
+	glVertex3f(x,y+dy,z+dz);
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D,test);
+	glBegin(GL_QUADS);
+	glTexCoord2d(0, 0);
+	glVertex3f(x,y,z);
+	glTexCoord2d(1, 0);
+	glVertex3f(x+dx,y,z);
+	glTexCoord2d(1, 1);
+	glVertex3f(x+dx,y+dy,z);
+	glTexCoord2d(0, 1);
+	glVertex3f(x,y+dy,z);
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D,test);
+	glBegin(GL_QUADS);
+	glTexCoord2d(0, 0);
+	glVertex3f(x,y,z+dz);
+	glTexCoord2d(1, 0);
+	glVertex3f(x+dx,y,z+dz);
+	glTexCoord2d(1, 1);
+	glVertex3f(x+dx,y+dy,z+dz);
+	glTexCoord2d(0, 1);
+	glVertex3f(x,y+dy,z+dz);
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D,test);
+	glBegin(GL_QUADS);
+	glTexCoord2d(0, 0);
+	glVertex3f(x,y,z);
+	glTexCoord2d(1, 0);
+	glVertex3f(x+dx,y,z);
+	glTexCoord2d(1, 1);
+	glVertex3f(x+dx,y,z+dz);
+	glTexCoord2d(0, 1);
+	glVertex3f(x,y,z+dz);
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D,test);
+	glBegin(GL_QUADS);
+	glTexCoord2d(0, 0);
+	glVertex3f(x,y,z);
+	glTexCoord2d(1, 0);
+	glVertex3f(x,y+dy,z);
+	glTexCoord2d(1, 1);
+	glVertex3f(x,y+dy,z+dz);
+	glTexCoord2d(0, 1);
+	glVertex3f(x,y,z+dz);
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D,test);
+	glBegin(GL_QUADS);
+	glTexCoord2d(0, 0);
+	glVertex3f(x+dx,y,z);
+	glTexCoord2d(1, 0);
+	glVertex3f(x+dx,y+dy,z);
+	glTexCoord2d(1, 1);
+	glVertex3f(x+dx,y+dy,z+dz);
+	glTexCoord2d(0, 1);
+	glVertex3f(x+dx,y,z+dz);
+	glEnd();
 }
 void skybox(float x,float y,float z,float d,float dz){
 
@@ -214,7 +291,7 @@ void skybox(float x,float y,float z,float d,float dz){
 	glVertex3f(x+d,y,z+dz);
 	glEnd();
 }
-float playerX=1010,playerY=1010,playerZ=0.2,Diff=0,Diff2=0,cameraX=0,cameraY=0,cameraZ=0;
+
 void cameraMovement(){
 	if (keys['W']){
 		playerX += 1 * cos(Diff * 3.1415 / 180); 
@@ -245,15 +322,18 @@ void cameraMovement(){
 		Diff2 -= 5;
 	}
 	if (keys['I']){
-		playerZ = 10;
+		if (playerZ < 10){
+			playerZ = 10;
+		}else if (playerZ > 0.2){
+			playerZ = 0.2;
+		}
 	}
 	cameraX = playerX + 5 * cos(Diff * 3.1415 / 180);
 	cameraY = playerY + 5 * sin(Diff * 3.1415 / 180);
 	cameraZ = playerZ + 5 * sin(Diff2 * 3.1415 / 180);
 	gluLookAt(playerX,playerY,playerZ,cameraX,cameraY,cameraZ,0,0,1);
 }
-float rot=0,A=0.1;
-auto quadr=gluNewQuadric();
+
 
 void drawCircle(float x, float y, float z, float r){
 	float dx=0,dy=0;
@@ -302,7 +382,6 @@ void drawFan(float x, float y, float z){
 		glPopMatrix();
 	}
 }
-
 void drawBlades(float x,float y,float z){
 	for (int i=0;i<360;i+=18){
 		glPushMatrix();
@@ -343,12 +422,36 @@ void lightManager(float x, float y, float z){
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuseR);
 	}
 }
+
+void drawAnt(float x, float y,float z){
+	drawCube(x,y,z,0.2,0.2,0.2);
+	drawCube(x+0.05,y+0.2,z+0.05,0.1,0.1,0.1);
+	drawCube(x,y+0.3,z,0.2,0.3,0.2);
+}
+void drawAnts(int n){
+	for (int i=0;i<n;i++){
+		drawAnt(ants[i].getX(), ants[i].getY(), 0.09);
+	}
+}
+void theANTs(int n){
+	for (int i=0;i<n;i++){
+		ants[i].randAnt(0.1);
+	}
+	drawAnts(n);
+}
+void moveAnts(int n){
+	for (int i=0;i<n;i++){
+		ants[i].move();
+	}
+}
 void CPUroom(){
 	lightManager(1010,1010,10);
 	drawGround(1000,1000,0,20);
 	skybox(1000,1000,0,20,10);
 	drawFan(1010,1010,10);
 	drawBlades(1010,1010,8);
+	theANTs(3);
+	moveAnts(3);
 }
 void DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {
