@@ -128,11 +128,8 @@ void SetupSceneLight()
 	glEnable(GL_LIGHT0);
 }
 
-<<<<<<< Updated upstream
-=======
 int dvdFrontTexture, dvdUpTexture;
 
->>>>>>> Stashed changes
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
@@ -145,16 +142,11 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	test = LoadTexture("rxr.bmp",100);
 	ground = LoadTexture("down.bmp",100);
 	wall = LoadTexture("wall.bmp",100);
-<<<<<<< Updated upstream
-
 
 	SetupSceneLight();
-=======
 
-	SetupSceneLight();
 	dvdUpTexture = LoadTexture("dvdUp.bmp", 100);
 	dvdFrontTexture = LoadTexture("dvdFront.bmp", 100);
->>>>>>> Stashed changes
 	return TRUE;										// Initialization Went OK
 }
 
@@ -226,14 +218,12 @@ void skybox(float x,float y,float z,float d,float dz){
 	glVertex3f(x+d,y,z+dz);
 	glEnd();
 }
-<<<<<<< Updated upstream
-float playerX=1010,playerY=1010,playerZ=0.2,Diff=0,Diff2=0,cameraX=0,cameraY=0,cameraZ=0;
-=======
-float playerX=1010,playerY=1010,playerZ=0.2;
-//float playerX=0, playerY=0, playerZ=0.2;
-
 float Diff=0,Diff2=0,cameraX=0,cameraY=0,cameraZ=0;
->>>>>>> Stashed changes
+//float playerX=1010,playerY=1010,playerZ=0.2,Diff=0,Diff2=0,cameraX=0,cameraY=0,cameraZ=0;
+//float playerX=1010,playerY=1010,playerZ=0.2;
+
+float playerX=0, playerY=0, playerZ=0.2;
+
 void cameraMovement(){
 	if (keys['W']){
 		playerX += 1 * cos(Diff * 3.1415 / 180); 
@@ -366,11 +356,8 @@ void CPUroom(){
 	lightManager(1010,1010,10);
 	drawGround(1000,1000,0,20);
 	skybox(1000,1000,0,20,10);
-<<<<<<< Updated upstream
 	drawFan(1010,1010,10);
 	drawBlades(1010,1010,8);
-}
-=======
 	drawFan(1010,1010,10);
 	drawBlades(1010,1010,5);
 	drawFan(1010,1010,10);
@@ -379,15 +366,16 @@ void CPUroom(){
 /////////////////////////////////////
 
 void drawFrontDvd(int x,int y,int z,int d){
+	
 	glColor3f(0.5,0.5,0.5);
 	glBindTexture(GL_TEXTURE_2D,dvdFrontTexture);
 	glBegin(GL_QUADS);
 	glTexCoord2d(0, 0);
 	glVertex3f(x,y,z);
 	glTexCoord2d(1, 0);
-	glVertex3f(x+(3*d),y,z);
+	glVertex3f(x+d,y,z+(3*d));
 	glTexCoord2d(1, 1);
-	glVertex3f(x+(3*d),y+d,z);
+	glVertex3f(x,y+d,z+(3*d));
 	glTexCoord2d(0, 1);
 	glVertex3f(x,y+d,z);
 	glEnd();
@@ -421,6 +409,8 @@ void drawDvdHole(float x, float y,float z, float r){
 		glVertex3f(px ,py, z);
 	}
 	glEnd();
+	
+
 
 }
 
@@ -462,17 +452,61 @@ void drawRotatingFilledCircleusingTriangles(float x, float y,float z, float r){
 		glVertex3f(x,y,z);
 	}
 	glEnd();
+	
 	drawDvdHole(0, 0, -1.95, 0.8);
 	
 	glPopMatrix();
 }
+
+float laserAng  = 0, tx = 3;
+void dvdLaser(float x, float y, float z){
+	glPushMatrix();
+	glRotatef(laserAng, 0, 0, 1);
+	laserAng+=4;
+	//glTranslated(tx, y ,z);
+	//tx -= 0.005; 
+
+	float zHighCircle = z + 2;
+	glBegin(GL_TRIANGLES);
+	float px3=x,py3=y;
+	glColor3f (1, 0, 0);
+	for (float i=0;i<2*3.15;i+=0.01){
+		glVertex3f(x,y,zHighCircle);
+		//glColor3f(0, 0, 0);
+		glVertex3f(px3 ,py3,zHighCircle);
+		px3 = x + (0.1) * cos(i);
+		py3 = y + (0.1) * sin(i);
+		glVertex3f(px3 ,py3, zHighCircle);
+	}
+	glEnd();
+	glLineWidth(4);
+	glBegin(GL_LINES);
+	glColor3f(1, 0, 0);
+	glVertex3f(x, y, z);
+	glVertex3f(x, y, zHighCircle);
+	glEnd();
+	glBegin(GL_TRIANGLES);
+	float px2=x,py2=y;
+	glColor3f (1, 0, 0);
+	for (float i=0;i<2*3.15;i+=0.01){
+		glVertex3f(x,y,z);
+		//glColor3f(0, 0, 0);
+		glVertex3f(px2 ,py2,z);
+		px2 = x + (0.1) * cos(i);
+		py2 = y + (0.1) * sin(i);
+		glVertex3f(px2 ,py2, z);
+	}
+	glEnd();
+	glPopMatrix();
+}
 void Iyad(){
 	drawRotatingFilledCircleusingTriangles(0, 0, -2, 8);
-	drawFrontDvd(0, 1, 5, 5);
-	iyaddrawUp(0,0,3,10);
+	drawFrontDvd(1, 1, 1, 5);
+	iyaddrawUp(0, 0, 3, 3);
+	dvdLaser(4, 4, -1.8);
+	
 }
 
->>>>>>> Stashed changes
 void DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {
 
@@ -483,16 +517,11 @@ void DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 
 	cameraMovement();
 
-<<<<<<< Updated upstream
-	CPUroom();
-
-=======
 	//gluLookAt(playerX,playerY,playerZ,cameraX,cameraY,cameraZ,0,0,1);
 
-	//Iyad();
-	CPUroom();
+	Iyad();
+	//CPUroom();
 	
->>>>>>> Stashed changes
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	
