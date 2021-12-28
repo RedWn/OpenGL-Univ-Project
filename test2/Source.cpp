@@ -130,8 +130,19 @@ void SetupSceneLight()
 
 int dvdFrontTexture, dvdUpTexture;
 
+int bar_code_line_thickness_array[20];
+void barCodeLines(){
+	float barCodeLineThickness;
+	for(int i=0; i<20; i++){
+		barCodeLineThickness = rand() % 30;
+		barCodeLineThickness += 10;
+		bar_code_line_thickness_array[i] = barCodeLineThickness;
+	}
+}
+
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
+	barCodeLines();
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
 	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);				// Black Background
 	glClearDepth(1.0f);									// Depth Buffer Setup
@@ -143,7 +154,7 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	ground = LoadTexture("down.bmp",100);
 	wall = LoadTexture("wall.bmp",100);
 
-	SetupSceneLight();
+	//SetupSceneLight();
 
 	dvdUpTexture = LoadTexture("dvdUp.bmp", 100);
 	dvdFrontTexture = LoadTexture("dvdFront.bmp", 100);
@@ -391,7 +402,7 @@ void iyaddrawUp(int x,int y,int z,int d){
 	glVertex3f(x,y,z);
 	glTexCoord2d(1, 0);
 	glVertex3f(x+d,y,z);
-	glTexCoord2d(1, 6);
+	glTexCoord2d(1, 1);
 	glVertex3f(x+d,y+d,z);
 	glTexCoord2d(0, 1);
 	glVertex3f(x,y+d,z);
@@ -399,19 +410,17 @@ void iyaddrawUp(int x,int y,int z,int d){
 }
 void drawDvdHole(float x, float y,float z, float r){
 	glBegin(GL_TRIANGLES);
-	float px=x,py=y;
+	float px = x, py = y;
 	glColor3f (0, 0, 0);
-	for (float i=0;i<2*3.15;i+=0.01){
-		glVertex3f(x,y,z);
-		glVertex3f(px ,py,z);
-		px=x+r* cos(i);
-		py=y+r*sin(i);
+	for (float i=0 ; i < 2 * 3.15 ; i += 0.01){
+		glVertex3f(x, y, z);
+		glVertex3f(px, py, z);
+		px = x + r * cos(i);
+		py = y + r * sin(i);
 		glVertex3f(px ,py, z);
 	}
 	glEnd();
 	
-
-
 }
 
 float ang = 0, randomred, randomgreen;
@@ -445,8 +454,8 @@ void drawRotatingFilledCircleusingTriangles(float x, float y,float z, float r){
 			b=0;
 		}
 		glVertex3f(px ,py,z);
-		px=x+r* cos(i);
-		py=y+r*sin(i);
+		px = x + r * cos(i);
+		py = y + r * sin(i);
 		glVertex3f(px ,py, z);
 		glColor3f (1, 1, 1);
 		glVertex3f(x,y,z);
@@ -499,11 +508,42 @@ void dvdLaser(float x, float y, float z){
 	glEnd();
 	glPopMatrix();
 }
+
+void dvdBarCode(float x, float y, float z, float width, float height){
+	glBegin(GL_QUADS);
+	glColor3f(1, 1, 1);
+	glVertex3f(x, y, z);
+	glVertex3f(x + width, y, z);
+	glVertex3f(x + width, y + height, z);
+	glVertex3f(x, y + height, z);
+	glEnd();
+	float barCodeLineThickness;
+	int j = 0;
+	for(float i = 0 ; i < 1 ; i += 0.04f){
+		if(j>=20)
+			j=0;
+
+		glLineWidth(bar_code_line_thickness_array[j]);
+		
+		glBegin(GL_LINES);
+		glColor3f(0, 0, 0);
+		glVertex3f(x + i + 0.1f, y + height - 0.1f, z);
+		if(j%5 == 0){
+			glVertex3f(x + i + 0.1f, y + 0.07f, z);
+		}
+		else
+			glVertex3f(x + i + 0.1f, y + 0.1f, z);
+		glEnd();
+		j++;
+	}
+
+}
 void Iyad(){
 	drawRotatingFilledCircleusingTriangles(0, 0, -2, 8);
 	drawFrontDvd(1, 1, 1, 5);
 	iyaddrawUp(0, 0, 3, 3);
 	dvdLaser(4, 4, -1.8);
+	dvdBarCode(-1, 1, -1, 1.15f, 0.5f);
 	
 }
 
