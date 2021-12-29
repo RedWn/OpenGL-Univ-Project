@@ -1,50 +1,16 @@
-﻿Build started 2021-12-27 4:30:36 PM.
+﻿Build started 2021-12-29 3:12:29 PM.
      1>Project "C:\Users\ASUS\documents\visual studio 2012\Projects\test2\test2\test2.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         D:\Prog\Visual Studio\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Source.cpp
-         Source.cpp
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(52): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 d:\prog\visual studio\vc\include\stdio.h(218) : see declaration of 'fopen'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(116): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(158): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(160): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(162): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(164): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(292): warning C4305: 'initializing' : truncation from 'double' to 'float'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(295): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(296): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(299): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(300): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(303): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(304): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(307): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(308): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(326): warning C4305: '=' : truncation from 'double' to 'float'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(329): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(330): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(331): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(334): warning C4305: 'initializing' : truncation from 'double' to 'float'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(353): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(364): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(367): warning C4305: '-=' : truncation from 'double' to 'float'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(389): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(405): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(406): warning C4305: 'initializing' : truncation from 'double' to 'GLfloat'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(425): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(425): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(428): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(429): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(429): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(430): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(430): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(434): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\source.cpp(439): warning C4305: 'argument' : truncation from 'double' to 'float'
+         D:\Prog\Visual Studio\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt ant.cpp
+         ant.cpp
        Link:
          D:\Prog\Visual Studio\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ASUS\documents\visual studio 2012\Projects\test2\Debug\test2.exe" /INCREMENTAL /NOLOGO GLAUX.lib GLU32.lib glut.lib OPENGL32.lib glut32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\ASUS\documents\visual studio 2012\Projects\test2\Debug\test2.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ASUS\documents\visual studio 2012\Projects\test2\Debug\test2.lib" /MACHINE:X86 Debug\ant.obj
+         Debug\CPU.obj
+         Debug\Light.obj
          Debug\Source.obj
          test2.vcxproj -> C:\Users\ASUS\documents\visual studio 2012\Projects\test2\Debug\test2.exe
      1>Done Building Project "C:\Users\ASUS\documents\visual studio 2012\Projects\test2\test2\test2.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:03.68
+Time Elapsed 00:00:10.97

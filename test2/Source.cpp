@@ -4,7 +4,8 @@
 #include <gl\glu.h>			// Header File For The GLu32 Library
 #include <cmath>
 #include "ant.h"
-
+#include "CPU.h"
+#include "Light.h"
 
 HDC			hDC=NULL;		// Private GDI Device Context
 HGLRC		hRC=NULL;		// Permanent Rendering Context
@@ -98,36 +99,8 @@ int LoadTexture(const char *filename,int alpha)
     return (num_texture); // Returns the current texture OpenGL ID
 }
 int test,ground,wall;
-
-void ResetLightPosition(float x, float y, float z)
-{
-	GLfloat position[] = {x, y, z, 1.0f};
-	glLightfv(GL_LIGHT0, GL_POSITION, position); // Position The Light
-}
-
-void ResetLightColor(float r, float g, float b)
-{
-	GLfloat color[] = {r, g, b, 1.0f};
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, color); // Light color
-}
-
-void SetupSceneLight()
-{
-	GLfloat light_ambient[] = { 0.2, 0.2, 0.2, 1};
-	GLfloat light_diffuse[] = { 1, 1, 1, 1 };
-	GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
-	GLfloat direction[] = { 0, 0, -1};
-
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, direction);
-	ResetLightColor(1.0f, 1.0f, 1.0f); // white light
-	ResetLightPosition(0, 0, 10); // in front of the scene
-	glEnable(GL_LIGHT0);
-}
+int tex[10];
+Light light = Light();
 
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
@@ -138,165 +111,21 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
 	glEnable(GL_TEXTURE_2D);
-	test = LoadTexture("rxr.bmp",100);
-	ground = LoadTexture("down.bmp",100);
-	wall = LoadTexture("wall.bmp",100);
+	tex[0] = LoadTexture("rxr.bmp",100);
+	tex[1] = LoadTexture("down.bmp",100);
+	tex[2] = LoadTexture("wall.bmp",100);
 
-
-	SetupSceneLight();
 	return TRUE;										// Initialization Went OK
 }
-
 float rot=0,A=0.1;
-auto quadr=gluNewQuadric();
-Ant ants[] = {Ant(1000+rand()%20,1000+rand()%20,0.2), Ant(1000+rand()%20,1000+rand()%20,0.2), Ant(1000+rand()%20,1000+rand()%20,0.2)};
 float playerX=1010,playerY=1010,playerZ=0.2,Diff=0,Diff2=0,cameraX=0,cameraY=0,cameraZ=0;
 
-void drawGround(int x,int y,int z,int d){
-	glColor3f(0.5,0.5,0.5);
-	glBindTexture(GL_TEXTURE_2D,ground);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 1);
-	glVertex3f(x,y,z);
-	glTexCoord2d(0, 0);
-	glVertex3f(x+d,y,z);
-	glTexCoord2d(1, 0);
-	glVertex3f(x+d,y+d,z);
-	glTexCoord2d(1, 1);
-	glVertex3f(x,y+d,z);
-	glEnd();
-
-}
-void drawCube(float x,float y,float z,float dx,float dy,float dz){
-
-	glBindTexture(GL_TEXTURE_2D,test);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3f(x,y+dy,z);
-	glTexCoord2d(1, 0);
-	glVertex3f(x+dx,y+dy,z);
-	glTexCoord2d(1, 1);
-	glVertex3f(x+dx,y+dy,z+dz);
-	glTexCoord2d(0, 1);
-	glVertex3f(x,y+dy,z+dz);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D,test);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3f(x,y,z);
-	glTexCoord2d(1, 0);
-	glVertex3f(x+dx,y,z);
-	glTexCoord2d(1, 1);
-	glVertex3f(x+dx,y+dy,z);
-	glTexCoord2d(0, 1);
-	glVertex3f(x,y+dy,z);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D,test);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3f(x,y,z+dz);
-	glTexCoord2d(1, 0);
-	glVertex3f(x+dx,y,z+dz);
-	glTexCoord2d(1, 1);
-	glVertex3f(x+dx,y+dy,z+dz);
-	glTexCoord2d(0, 1);
-	glVertex3f(x,y+dy,z+dz);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D,test);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3f(x,y,z);
-	glTexCoord2d(1, 0);
-	glVertex3f(x+dx,y,z);
-	glTexCoord2d(1, 1);
-	glVertex3f(x+dx,y,z+dz);
-	glTexCoord2d(0, 1);
-	glVertex3f(x,y,z+dz);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D,test);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3f(x,y,z);
-	glTexCoord2d(1, 0);
-	glVertex3f(x,y+dy,z);
-	glTexCoord2d(1, 1);
-	glVertex3f(x,y+dy,z+dz);
-	glTexCoord2d(0, 1);
-	glVertex3f(x,y,z+dz);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D,test);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3f(x+dx,y,z);
-	glTexCoord2d(1, 0);
-	glVertex3f(x+dx,y+dy,z);
-	glTexCoord2d(1, 1);
-	glVertex3f(x+dx,y+dy,z+dz);
-	glTexCoord2d(0, 1);
-	glVertex3f(x+dx,y,z+dz);
-	glEnd();
-}
-void skybox(float x,float y,float z,float d,float dz){
-
-	glBindTexture(GL_TEXTURE_2D,wall);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3f(x,y+d,z);
-	glTexCoord2d(1, 0);
-	glVertex3f(x+d,y+d,z);
-	glTexCoord2d(1, 1);
-	glVertex3f(x+d,y+d,z+dz);
-	glTexCoord2d(0, 1);
-	glVertex3f(x,y+d,z+dz);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D,wall);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3f(x,y,z);
-	glTexCoord2d(1, 0);
-	glVertex3f(x+d,y,z);
-	glTexCoord2d(1, 1);
-	glVertex3f(x+d,y,z+dz);
-	glTexCoord2d(0, 1);
-	glVertex3f(x,y,z+dz);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D,wall);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3f(x,y,z);
-	glTexCoord2d(1, 0);
-	glVertex3f(x,y+d,z);
-	glTexCoord2d(1, 1);
-	glVertex3f(x,y+d,z+dz);
-	glTexCoord2d(0, 1);
-	glVertex3f(x,y,z+dz);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D,wall);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3f(x+d,y,z);
-	glTexCoord2d(1, 0);
-	glVertex3f(x+d,y+d,z);
-	glTexCoord2d(1, 1);
-	glVertex3f(x+d,y+d,z+dz);
-	glTexCoord2d(0, 1);
-	glVertex3f(x+d,y,z+dz);
-	glEnd();
-}
 
 void cameraMovement(){
 	if (keys['W']){
 		playerX += 1 * cos(Diff * 3.1415 / 180); 
 		playerY += 1 * sin(Diff * 3.1415 / 180);
-	}
+	}	
 	if (keys['S']){
 		playerX -= 1 * cos(Diff * 3.1415 / 180); 
 		playerY -= 1 * sin(Diff * 3.1415 / 180);
@@ -334,125 +163,20 @@ void cameraMovement(){
 	gluLookAt(playerX,playerY,playerZ,cameraX,cameraY,cameraZ,0,0,1);
 }
 
-
-void drawCircle(float x, float y, float z, float r){
-	float dx=0,dy=0;
-	glBegin(GL_TRIANGLE_FAN);
-	for (float i=0.0f;i <= (2*3.15f*r);i += 0.01f){
-		glVertex3f(x,y,z);
-		glVertex3f(dx,dy,z);
-		dx = r * cos(i);
-		dy = r * sin(i);
-		glVertex3f(dx,dy,z);
-	}
-	glEnd();
-}
-void drawFan(float x, float y, float z){
-	glTranslatef(1010,1010,9);
-	glDisable(GL_TEXTURE_2D);
-	glColor3f(0.5,0.5,0.5);
-	for (float i=0;i<2;i+=0.01){
-	drawCircle(0,0,i,2);
-	}
-	glEnable(GL_TEXTURE_2D);
-	glTranslatef(-1010,-1010,-9);
-	for (int i = 0; i < 360; i += 60){
-		glPushMatrix();
-		glTranslatef(x,y,z);
-		glRotatef(rot+i,0,0,1);
-		glTranslatef(-x,-y,-z);
-		if(keys['E']){
-			A += 0.1;
-		}
-		if(keys['Q']){
-			A -= 0.1;
-		}
-		if (A<0)
-			A=0;
-		rot += A;
-		glDisable(GL_TEXTURE_2D);
-		glColor3f(0.5,0.5,0.5);
-		glBegin(GL_QUADS);
-		glVertex3f(x,y,z+1);
-		glVertex3f(x+2,y,z-1);
-		glVertex3f(x+2,y+10,z-1);
-		glVertex3f(x,y+10,z+1);
-		glEnd();
-		glEnable(GL_TEXTURE_2D);
-		glPopMatrix();
-	}
-}
-void drawBlades(float x,float y,float z){
-	for (int i=0;i<360;i+=18){
-		glPushMatrix();
-		glTranslatef(x,y,z);
-		glRotatef(i,0,0,1);
-		glTranslatef(-x,-y,-z);
-		glDisable(GL_TEXTURE_2D);
-		glColor3f(1,1,1);
-		glBegin(GL_QUADS);
-		glVertex3f(x,y+5,z);
-		glVertex3f(x,y+9,z);
-		glVertex3f(x,y+9,z-10);
-		glVertex3f(x,y+5,z-10);
-		glEnd();
-		glEnable(GL_TEXTURE_2D);
-		glPopMatrix();
-	}
-}
-void lightManager(float x, float y, float z){
-	GLfloat light_diffuseH[] = { 1, 1, 1, 1 };
-	GLfloat light_diffuseL[] = { 0.1, 0.1, 0.1, 1 };
-	GLfloat light_diffuseR[] = { 0.8, 0, 0, 1 };
-	glTranslatef(x,y,z);
-	ResetLightPosition(0,0,0);
-	glTranslatef(-x,-y,-z);
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	ResetLightColor(1,1,1);
-	if ((int)rot%60 < 20){
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuseL);
-	}else{
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuseH);
-	}
+void keyer(){
 	if (keys['B']){
 		glDisable(GL_LIGHTING);
 	}
-	if (A < 0.1){
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuseR);
-	}
+	if(keys['E']){
+			CPU::dA(0.1);
+		}
+		if(keys['Q']){
+			CPU::dA(-0.1);
+		}
 }
 
-void drawAnt(float x, float y,float z){
-	drawCube(x,y,z,0.2,0.2,0.2);
-	drawCube(x+0.05,y+0.2,z+0.05,0.1,0.1,0.1);
-	drawCube(x,y+0.3,z,0.2,0.3,0.2);
-}
-void drawAnts(int n){
-	for (int i=0;i<n;i++){
-		drawAnt(ants[i].getX(), ants[i].getY(), 0.09);
-	}
-}
-void theANTs(int n){
-	for (int i=0;i<n;i++){
-		ants[i].randAnt(0.1);
-	}
-	drawAnts(n);
-}
-void moveAnts(int n){
-	for (int i=0;i<n;i++){
-		ants[i].move();
-	}
-}
-void CPUroom(){
-	lightManager(1010,1010,10);
-	drawGround(1000,1000,0,20);
-	skybox(1000,1000,0,20,10);
-	drawFan(1010,1010,10);
-	drawBlades(1010,1010,8);
-	theANTs(3);
-	moveAnts(3);
-}
+
+
 void DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {
 
@@ -463,7 +187,10 @@ void DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 
 	cameraMovement();
 
-	CPUroom();
+	keyer();
+	light.lightManager(1010,1010,10);
+	CPU cpu = CPU(1010,1010,0.2,0,0,0,0,0,tex);
+	//CPUroom();
 
 	glClear(GL_DEPTH_BUFFER_BIT);
 

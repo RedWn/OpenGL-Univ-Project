@@ -1,4 +1,3 @@
-#include <iostream>
 #include "ant.h"
 
 Ant::Ant(float xx, float yy, float zz){
@@ -11,13 +10,13 @@ void Ant::stopAnt(){
 	dy = 0;
 }
 void Ant::randAnt(float i){
-	dx = (rand()%11 - 5) * i;
-	dy = (rand()%11 - 5) * i;
+	dx = (rand()%5 - 2) * i;
+	dy = (rand()%5 - 2) * i;
 }
 void Ant::move(){
 	x+=dx;
 	y+=dy;
-	if (x > 1020 || x < 1000)
+	if (x > 1020 || x < 1000) //TODO fix the hardcoded and slap someone
 		x=1010;
 	if (y > 1020 || y < 1000)
 		y=1010;

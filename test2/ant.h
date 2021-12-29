@@ -1,7 +1,7 @@
+#pragma once
 #include <math.h>
 #include <iostream>
-class Ant 
-{
+class Ant {
 private:
 	float x;
 	float dx;
