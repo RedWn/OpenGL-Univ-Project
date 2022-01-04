@@ -96,50 +96,18 @@ int LoadTexture(const char *filename,int alpha)
 
     return (num_texture); // Returns the current texture OpenGL ID
 }
-int test,ground,wall;
-
-void ResetLightPosition(float x, float y, float z)
-{
-	GLfloat position[] = {x, y, z, 1.0f};
-	glLightfv(GL_LIGHT0, GL_POSITION, position); // Position The Light
-}
-
-void ResetLightColor(float r, float g, float b)
-{
-	GLfloat color[] = {r, g, b, 1.0f};
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, color); // Light color
-}
-
-void SetupSceneLight()
-{
-	GLfloat light_ambient[] = { 0.2, 0.2, 0.2, 1};
-	GLfloat light_diffuse[] = { 1, 1, 1, 1 };
-	GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
-	GLfloat direction[] = { 0, 0, -1};
-
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, direction);
-	ResetLightColor(1.0f, 1.0f, 1.0f); // white light
-	ResetLightPosition(0, 0, 10); // in front of the scene
-	glEnable(GL_LIGHT0);
-}
-
-int dvdFrontTexture, dvdUpTexture;
 
 int bar_code_line_thickness_array[20];
 void barCodeLines(){
 	float barCodeLineThickness;
-	for(int i=0; i<20; i++){
+	for(int i = 0 ; i < 20 ; i++){
 		barCodeLineThickness = rand() % 30;
-		barCodeLineThickness += 10;
+		barCodeLineThickness += 2;
 		bar_code_line_thickness_array[i] = barCodeLineThickness;
 	}
 }
 
+int dvdFrontTexture, dvdUpTexture, dvdSideTexture;
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
 	barCodeLines();
@@ -149,290 +117,191 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
 	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
-	glEnable(GL_TEXTURE_2D);
-	test = LoadTexture("rxr.bmp",100);
-	ground = LoadTexture("down.bmp",100);
-	wall = LoadTexture("wall.bmp",100);
-
-	//SetupSceneLight();
-
+	
 	dvdUpTexture = LoadTexture("dvdUp.bmp", 100);
-	dvdFrontTexture = LoadTexture("dvdFront.bmp", 100);
+	dvdFrontTexture = LoadTexture("dvdfront.bmp", 100);
+	dvdSideTexture = LoadTexture("dvdSide.bmp", 100);
 	return TRUE;										// Initialization Went OK
 }
 
-float angle=0;
-	
-int dx=0,dy=0,dz=0;
-void drawGround(int x,int y,int z,int d){
-	glColor3f(0.5,0.5,0.5);
-	glBindTexture(GL_TEXTURE_2D,ground);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 1);
-	glVertex3f(x,y,z);
-	glTexCoord2d(0, 0);
-	glVertex3f(x+d,y,z);
-	glTexCoord2d(1, 0);
-	glVertex3f(x+d,y+d,z);
-	glTexCoord2d(1, 1);
-	glVertex3f(x,y+d,z);
-	glEnd();
-
-}
-void skybox(float x,float y,float z,float d,float dz){
-
-	glBindTexture(GL_TEXTURE_2D,wall);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3f(x,y+d,z);
-	glTexCoord2d(1, 0);
-	glVertex3f(x+d,y+d,z);
-	glTexCoord2d(1, 1);
-	glVertex3f(x+d,y+d,z+dz);
-	glTexCoord2d(0, 1);
-	glVertex3f(x,y+d,z+dz);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D,wall);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3f(x,y,z);
-	glTexCoord2d(1, 0);
-	glVertex3f(x+d,y,z);
-	glTexCoord2d(1, 1);
-	glVertex3f(x+d,y,z+dz);
-	glTexCoord2d(0, 1);
-	glVertex3f(x,y,z+dz);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D,wall);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3f(x,y,z);
-	glTexCoord2d(1, 0);
-	glVertex3f(x,y+d,z);
-	glTexCoord2d(1, 1);
-	glVertex3f(x,y+d,z+dz);
-	glTexCoord2d(0, 1);
-	glVertex3f(x,y,z+dz);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D,wall);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3f(x+d,y,z);
-	glTexCoord2d(1, 0);
-	glVertex3f(x+d,y+d,z);
-	glTexCoord2d(1, 1);
-	glVertex3f(x+d,y+d,z+dz);
-	glTexCoord2d(0, 1);
-	glVertex3f(x+d,y,z+dz);
-	glEnd();
-}
 float Diff=0,Diff2=0,cameraX=0,cameraY=0,cameraZ=0;
 //float playerX=1010,playerY=1010,playerZ=0.2,Diff=0,Diff2=0,cameraX=0,cameraY=0,cameraZ=0;
 //float playerX=1010,playerY=1010,playerZ=0.2;
 
-float playerX=0, playerY=0, playerZ=0.2;
+float playerX = -18, playerY = 0, playerZ = -0.5f;
 
+void redQuad(float x, float y, float z, float d){
+	glBegin(GL_QUADS);
+	glColor3f(1, 0, 0);
+	glVertex3f(x, y, z);
+	
+	glVertex3f(x, y + (2 * d), z);
+	
+	glVertex3f(x, y + (2 * d), z + d);
+	
+	glVertex3f(x, y, z + d);
+	glEnd();
+}
+bool redButton = false;
 void cameraMovement(){
 	if (keys['W']){
-		playerX += 1 * cos(Diff * 3.1415 / 180); 
-		playerY += 1 * sin(Diff * 3.1415 / 180);
+		playerX += 0.2f * cos(Diff * 3.1415 / 180); 
+		playerY += 0.2f * sin(Diff * 3.1415 / 180);
 	}
 	if (keys['S']){
-		playerX -= 1 * cos(Diff * 3.1415 / 180); 
-		playerY -= 1 * sin(Diff * 3.1415 / 180);
+		playerX -= 0.2f * cos(Diff * 3.1415 / 180); 
+		playerY -= 0.2f * sin(Diff * 3.1415 / 180);
 	}
 	if (keys['D']){
-		playerX -= 1 * sin(Diff * 3.1415 / 180);
-		playerY -= 1 * cos(Diff * 3.1415 / 180);
+		playerX -= 0.2f * sin(Diff * 3.1415 / 180);
+		playerY -= 0.2f * cos(Diff * 3.1415 / 180);
 	}
 	if (keys['A']){
-		playerX += 1 * sin(Diff * 3.1415 / 180); 
-		playerY += 1 * cos(Diff * 3.1415 / 180);
+		playerX += 0.2f * sin(Diff * 3.1415 / 180); 
+		playerY += 0.2f * cos(Diff * 3.1415 / 180);
 	}
 	if (keys[VK_LEFT]){
-		Diff += 5;
+		Diff += 2;
 	}
 	if (keys[VK_RIGHT]){
-		Diff -= 5;
+		Diff -= 2;
 	}
 	if (keys[VK_UP]){
-		Diff2 += 5;
+		Diff2 += 2;
 	}
 	if (keys[VK_DOWN]){
-		Diff2 -= 5;
+		Diff2 -= 2;
+	}
+	if (keys['U']){
+		playerZ += 0.1f;
 	}
 	if (keys['I']){
-		playerZ = 10;
+		playerZ -= 0.1f;
 	}
+	if (keys['R']){
+		redButton = true;
+	}
+
 	cameraX = playerX + 5 * cos(Diff * 3.1415 / 180);
 	cameraY = playerY + 5 * sin(Diff * 3.1415 / 180);
 	cameraZ = playerZ + 5 * sin(Diff2 * 3.1415 / 180);
 	gluLookAt(playerX,playerY,playerZ,cameraX,cameraY,cameraZ,0,0,1);
 }
-float rot=0,A=0.1;
-auto quadr=gluNewQuadric();
-
-void drawCircle(float x, float y, float z, float r){
-	float dx=0,dy=0;
-	glBegin(GL_TRIANGLE_FAN);
-	for (float i=0.0f;i <= (2*3.15f*r);i += 0.01f){
-		glVertex3f(x,y,z);
-		glVertex3f(dx,dy,z);
-		dx = r * cos(i);
-		dy = r * sin(i);
-		glVertex3f(dx,dy,z);
-	}
-	glEnd();
-}
-void drawFan(float x, float y, float z){
-	glTranslatef(1010,1010,9);
-	glDisable(GL_TEXTURE_2D);
-	glColor3f(0.5,0.5,0.5);
-	for (float i=0;i<2;i+=0.01){
-	drawCircle(0,0,i,2);
-	}
-	glEnable(GL_TEXTURE_2D);
-	glTranslatef(-1010,-1010,-9);
-	for (int i = 0; i < 360; i += 60){
-		glPushMatrix();
-		glTranslatef(x,y,z);
-		glRotatef(rot+i,0,0,1);
-		glTranslatef(-x,-y,-z);
-		if(keys['E']){
-			A += 0.1;
-		}
-		if(keys['Q']){
-			A -= 0.1;
-		}
-		if (A<0)
-			A=0;
-		rot += A;
-		glDisable(GL_TEXTURE_2D);
-		glColor3f(0.5,0.5,0.5);
-		glBegin(GL_QUADS);
-		glVertex3f(x,y,z+1);
-		glVertex3f(x+2,y,z-1);
-		glVertex3f(x+2,y+10,z-1);
-		glVertex3f(x,y+10,z+1);
-		glEnd();
-		glEnable(GL_TEXTURE_2D);
-		glPopMatrix();
-	}
-}
-
-void drawBlades(float x,float y,float z){
-	for (int i=0;i<360;i+=18){
-		glPushMatrix();
-		glTranslatef(x,y,z);
-		glRotatef(i,0,0,1);
-		glTranslatef(-x,-y,-z);
-		glDisable(GL_TEXTURE_2D);
-		glColor3f(1,1,1);
-		glBegin(GL_QUADS);
-		glVertex3f(x,y+5,z);
-		glVertex3f(x,y+9,z);
-		glVertex3f(x,y+9,z-10);
-		glVertex3f(x,y+5,z-10);
-		glEnd();
-		glEnable(GL_TEXTURE_2D);
-		glPopMatrix();
-	}
-}
-void lightManager(float x, float y, float z){
-	GLfloat light_diffuseH[] = { 1, 1, 1, 1 };
-	GLfloat light_diffuseL[] = { 0.1, 0.1, 0.1, 1 };
-	GLfloat light_diffuseR[] = { 0.8, 0, 0, 1 };
-	glTranslatef(x,y,z);
-	ResetLightPosition(0,0,0);
-	glTranslatef(-x,-y,-z);
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	ResetLightColor(1,1,1);
-	if ((int)rot%60 < 20){
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuseL);
-	}else{
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuseH);
-	}
-	if (keys['B']){
-		glDisable(GL_LIGHTING);
-	}
-	if (A < 0.1){
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuseR);
-	}
-}
-void CPUroom(){
-	lightManager(1010,1010,10);
-	drawGround(1000,1000,0,20);
-	skybox(1000,1000,0,20,10);
-	drawFan(1010,1010,10);
-	drawBlades(1010,1010,8);
-	drawFan(1010,1010,10);
-	drawBlades(1010,1010,5);
-	drawFan(1010,1010,10);
-
-}
-/////////////////////////////////////
 
 void drawFrontDvd(int x,int y,int z,int d){
 	
-	glColor3f(0.5,0.5,0.5);
-	glBindTexture(GL_TEXTURE_2D,dvdFrontTexture);
+	glColor3f(0.6f, 0.6f, 0.6f);
+	glBindTexture(GL_TEXTURE_2D, dvdFrontTexture);
 	glBegin(GL_QUADS);
 	glTexCoord2d(0, 0);
-	glVertex3f(x,y,z);
+	glVertex3f(x, y, z);
+	
 	glTexCoord2d(1, 0);
-	glVertex3f(x+d,y,z+(3*d));
+	glVertex3f(x , y + (5.35f * d), z);
+
 	glTexCoord2d(1, 1);
-	glVertex3f(x,y+d,z+(3*d));
+	glVertex3f(x , y + (5.35f * d), z + (1.4f * d));
+	
 	glTexCoord2d(0, 1);
-	glVertex3f(x,y+d,z);
+	glVertex3f(x, y, z + (1.4f * d));
+	
+	glEnd();
+}
+void drawSideDvd(int x,int y,int z,int d){
+	
+	glColor3f(0.6f, 0.6f, 0.6f);
+	glBindTexture(GL_TEXTURE_2D, dvdSideTexture);
+	glBegin(GL_QUADS);
+	glTexCoord2d(0, 0);
+	glVertex3f(x, y, z);
+	
+	glTexCoord2d(1, 0);
+	glVertex3f(x + (6 * d), y, z);
+
+	glTexCoord2d(1, 1);
+	glVertex3f(x + (6 * d), y , z + (1.4f * d));
+	
+	glTexCoord2d(0, 1);
+	glVertex3f(x, y, z + (1.4f * d));
+	
+	glEnd();
+}
+void drawBackDvd(int x,int y,int z,int d){
+	
+	glColor3f(0.6f, 0.6f, 0.6f);
+	glBindTexture(GL_TEXTURE_2D, dvdSideTexture);
+	glBegin(GL_QUADS);
+	glTexCoord2d(0, 0);
+	glVertex3f(x, y, z);
+	
+	glTexCoord2d(1, 0);
+	glVertex3f(x , y + (5.35f * d), z);
+
+	glTexCoord2d(1, 1);
+	glVertex3f(x , y + (5.35f * d), z + (1.4f * d));
+	
+	glTexCoord2d(0, 1);
+	glVertex3f(x, y, z + (1.4f * d));
+	
 	glEnd();
 }
 
-//float iyadrot=0;
 
-void iyaddrawUp(int x,int y,int z,int d){
-	glColor3f(0.5,0.5,0.5);
+void drawDvdUp(float x,float y,float z,float d){
+	glColor3f(0.6f, 0.6f, 0.6f);
 	glBindTexture(GL_TEXTURE_2D, dvdUpTexture);
 	glBegin(GL_QUADS);
 	glTexCoord2d(0, 0);
-	glVertex3f(x,y,z);
+	glVertex3f(x, y, z);
 	glTexCoord2d(1, 0);
-	glVertex3f(x+d,y,z);
+	glVertex3f(x + (1.15f * d), y, z);
 	glTexCoord2d(1, 1);
-	glVertex3f(x+d,y+d,z);
+	glVertex3f(x + (1.15f * d), y + d, z);
 	glTexCoord2d(0, 1);
-	glVertex3f(x,y+d,z);
+	glVertex3f(x, y + d , z);
+	glEnd();
+}
+void drawDvdGround(float x,float y,float z,float d){
+	glColor3f(0.2f, 0.2f, 0.2f);
+	glBindTexture(GL_TEXTURE_2D, dvdUpTexture);
+	glBegin(GL_QUADS);
+	glTexCoord2d(0, 0);
+	glVertex3f(x, y, z);
+	glTexCoord2d(1, 0);
+	glVertex3f(x + (1.15f * d), y, z);
+	glTexCoord2d(1, 1);
+	glVertex3f(x + (1.15f * d), y + d, z);
+	glTexCoord2d(0, 1);
+	glVertex3f(x, y + d , z);
 	glEnd();
 }
 void drawDvdHole(float x, float y,float z, float r){
 	glBegin(GL_TRIANGLES);
 	float px = x, py = y;
-	glColor3f (0, 0, 0);
-	for (float i=0 ; i < 2 * 3.15 ; i += 0.01){
+	
+	for (float i = 0 ; i < 2 * 3.15f ; i += 0.01){
+		glColor3f (0, 0, 0);
 		glVertex3f(x, y, z);
+		glColor3f (0.6f, 0.6f, 0.6f);
 		glVertex3f(px, py, z);
 		px = x + r * cos(i);
 		py = y + r * sin(i);
 		glVertex3f(px ,py, z);
 	}
 	glEnd();
-	
 }
 
 float ang = 0, randomred, randomgreen;
 int b=0;
-void drawRotatingFilledCircleusingTriangles(float x, float y,float z, float r){
+void drawRotatingDvd(float x, float y,float z, float r){
 	glPushMatrix();
 	glRotatef(ang, 0, 0, 1);
-	ang+=1;
-	//int b = 0;
+	ang += 1;
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glBegin(GL_TRIANGLES);
-	float px=x,py=y;
-	for (float i=0;i<2*3.14*r;i+=0.1){
+	float px = x, py = y;
+	for (float i = 0 ; i < 2 * 3.14f * r ; i += 0.1){
 		randomred = rand() % 150 ;
 		randomred+=50;
 		randomred/=255;
@@ -442,84 +311,84 @@ void drawRotatingFilledCircleusingTriangles(float x, float y,float z, float r){
 		randomgreen/=255;
 		
 		if(b == 0){
-			glColor3f (randomred, randomgreen, 0.8);
+			glColor4f (randomred, randomgreen, 0.8f, 0.1f);
 			b++;
 		}
 		else if(b == 1){
-			glColor3f (randomred, randomgreen, 0.8);
+			glColor4f (randomred, randomgreen, 0.8f, 0.1f);
 			b++;
 		}
 		else {
-			glColor3f (randomred, randomgreen, 0.8);
+			glColor4f (randomred, randomgreen, 0.8f, 0.1f);
 			b=0;
 		}
+
 		glVertex3f(px ,py,z);
 		px = x + r * cos(i);
 		py = y + r * sin(i);
 		glVertex3f(px ,py, z);
-		glColor3f (1, 1, 1);
-		glVertex3f(x,y,z);
+		glColor4f (1, 1, 1, 0.1f);
+		glVertex3f(x, y, z);
 	}
 	glEnd();
-	
+	glDisable(GL_BLEND);	
 	drawDvdHole(0, 0, -1.95, 0.8);
 	
 	glPopMatrix();
 }
 
-float laserAng  = 0, tx = 3;
+float laserAng  = 0;
 void dvdLaser(float x, float y, float z){
+	glEnable(GL_BLEND);	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);	float alpha = 0.3f;
 	glPushMatrix();
 	glRotatef(laserAng, 0, 0, 1);
-	laserAng+=4;
-	//glTranslated(tx, y ,z);
-	//tx -= 0.005; 
-
-	float zHighCircle = z + 2;
+	laserAng += 0.4f;
+	float zHighCircle = z + 3.5f;
 	glBegin(GL_TRIANGLES);
-	float px3=x,py3=y;
-	glColor3f (1, 0, 0);
-	for (float i=0;i<2*3.15;i+=0.01){
+	float px3 = x, py3 = y;
+	for (float i=0 ; i < 2 * 3.15f ; i += 0.01){
+		glColor4f (1, 0, 0, alpha);
 		glVertex3f(x,y,zHighCircle);
-		//glColor3f(0, 0, 0);
+		glColor4f(0.5f, 0, 0, alpha);
 		glVertex3f(px3 ,py3,zHighCircle);
-		px3 = x + (0.1) * cos(i);
-		py3 = y + (0.1) * sin(i);
+		px3 = x + (0.1f) * cos(i);
+		py3 = y + (0.1f) * sin(i);
 		glVertex3f(px3 ,py3, zHighCircle);
 	}
 	glEnd();
 	glLineWidth(4);
 	glBegin(GL_LINES);
-	glColor3f(1, 0, 0);
+	glColor4f(1, 0, 0, alpha);
 	glVertex3f(x, y, z);
 	glVertex3f(x, y, zHighCircle);
 	glEnd();
 	glBegin(GL_TRIANGLES);
-	float px2=x,py2=y;
-	glColor3f (1, 0, 0);
-	for (float i=0;i<2*3.15;i+=0.01){
+	float px2 = x, py2 = y;
+	for (float i = 0 ; i < 2 * 3.15f ; i += 0.01f){
+		glColor4f (1, 0, 0, alpha);
 		glVertex3f(x,y,z);
-		//glColor3f(0, 0, 0);
-		glVertex3f(px2 ,py2,z);
-		px2 = x + (0.1) * cos(i);
-		py2 = y + (0.1) * sin(i);
+		glColor4f(0.5f, 0, 0, alpha);
 		glVertex3f(px2 ,py2, z);
+		px2 = x + (0.1f) * cos(i);
+		py2 = y + (0.1f) * sin(i);
+		glVertex3f(px2, py2, z);
 	}
 	glEnd();
 	glPopMatrix();
+	glDisable(GL_BLEND);
 }
 
-void dvdBarCode(float x, float y, float z, float width, float height){
+void dvdBarCode(float x, float y, float z, float width, float height, float padding){
 	glBegin(GL_QUADS);
-	glColor3f(1, 1, 1);
+	glColor3f(0.7f, 0.7f, 0.7f);
 	glVertex3f(x, y, z);
-	glVertex3f(x + width, y, z);
-	glVertex3f(x + width, y + height, z);
-	glVertex3f(x, y + height, z);
+	glVertex3f(x, y + width, z);
+	glVertex3f(x+ height, y + width, z );
+	glVertex3f(x+ height, y , z );
 	glEnd();
 	float barCodeLineThickness;
 	int j = 0;
-	for(float i = 0 ; i < 1 ; i += 0.04f){
+	for(float i = 0 ; i < width - 0.3f ; i += 0.08f){
 		if(j>=20)
 			j=0;
 
@@ -527,47 +396,67 @@ void dvdBarCode(float x, float y, float z, float width, float height){
 		
 		glBegin(GL_LINES);
 		glColor3f(0, 0, 0);
-		glVertex3f(x + i + 0.1f, y + height - 0.1f, z);
+		glVertex3f(x + height - padding, y + i + padding, z );
 		if(j%5 == 0){
-			glVertex3f(x + i + 0.1f, y + 0.07f, z);
+			glVertex3f(x + 0.05f, y + i + padding, z);
 		}
 		else
-			glVertex3f(x + i + 0.1f, y + 0.1f, z);
+			glVertex3f(x+ padding, y + i + padding, z );
 		glEnd();
 		j++;
 	}
+}
 
-}
-void Iyad(){
-	drawRotatingFilledCircleusingTriangles(0, 0, -2, 8);
-	drawFrontDvd(1, 1, 1, 5);
-	iyaddrawUp(0, 0, 3, 3);
-	dvdLaser(4, 4, -1.8);
-	dvdBarCode(-1, 1, -1, 1.15f, 0.5f);
+void dvdCylinder(float x, float y, float z, float radius, float height){
 	
+	float px, py;
+	glBegin(GL_LINES);
+	glLineWidth(20);
+	for( float i = 0 ; i < 2 * 3.15f ; i+=0.01f){
+		px = x + radius * cos(i);
+		py = y + radius * sin(i);
+		glColor3f(0.5f, 0.5f, 0.5f);
+		glVertex3f(px, py, z);
+		glVertex3f(px, py, z + height);
+	}
+	glEnd();
 }
+
+
+void DVD(){
+	drawRotatingDvd(0, 0, -2, 7.8f);
+	glEnable(GL_TEXTURE_2D);
+	
+	drawFrontDvd(-9, -8, -2, 3);
+	drawDvdUp(-9, -8, 2.01f, 16);
+	drawDvdGround(-9, -8, -2.1f, 16);
+	drawSideDvd(-9, -8, -2, 3);
+	drawSideDvd(-9, +8, -2, 3);
+	drawBackDvd(+9, -8, -2, 3);
+	glDisable(GL_TEXTURE_2D);
+
+	if(redButton){
+		redQuad(-9.01f, -3.5f, -1.45f, 0.24f);
+	}
+
+	dvdLaser(4, 4, -1.8);
+	dvdBarCode(-2, +2, 2, 3, 1.6f, 0.2f);
+	dvdCylinder(0, 0, -2, 7.8f, 4);
+	
+	}
 
 void DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 	glLoadIdentity();									// Reset The Current Modelview Matrix
-	
 	glPushMatrix();
 
 	cameraMovement();
+	DVD();
 
-	//gluLookAt(playerX,playerY,playerZ,cameraX,cameraY,cameraZ,0,0,1);
-
-	Iyad();
-	//CPUroom();
-	
 	glClear(GL_DEPTH_BUFFER_BIT);
-
-	
-	
 	glPopMatrix();
-	
 
     //DO NOT REMOVE THIS
 	SwapBuffers(hDC);			
@@ -874,14 +763,14 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 	}
 
 	// Create Our OpenGL Window
-	if (!CreateGLWindow("RedWn's Window",1280,720,16,fullscreen))
+	if (!CreateGLWindow("DVD", 1280,720,16,fullscreen))
 	{
 		return 0;									// Quit If Window Was Not Created
 	}
 
 
 	//Set drawing timer to 20 frame per second
-	UINT timer=SetTimer(hWnd,0,50,(TIMERPROC) NULL);
+	UINT timer=SetTimer(hWnd,0,2,(TIMERPROC) NULL);
 
 	while (GetMessage(&msg, NULL, 0, 0)) 
 	{
