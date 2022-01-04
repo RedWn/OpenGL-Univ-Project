@@ -6,12 +6,15 @@
 #include <cmath>
 #include <vector>
 #include "ant.h"
+#include "Model_3DS.h"
 
 class CPU
 {
 private:
-	int antNum;
 	std::vector<Ant> ants;
+	std::vector<float> antsX;
+	std::vector<float> antsY;
+	Model_3DS ant;
 	float playerX;
 	float playerY;
 	float playerZ;
@@ -20,9 +23,10 @@ private:
 	float cameraX;
 	float cameraY;
 	float cameraZ;
-	int tex[10];
+	int* tex;
 
 public:
+	int antNum;
 	static float rot;
 	static float A;
 	CPU(float x, float y, float z, float d, float d2, float cx, float cy, float cz,int tex[]);
@@ -41,5 +45,6 @@ public:
 	void drawAnts(int n);
 	void theANTs(int n);
 	void moveAnts(int n);
+	void checkAnt(float px, float py);
 	void CPUroom();
 };

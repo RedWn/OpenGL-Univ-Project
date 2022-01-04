@@ -15,6 +15,7 @@ public:
 	void stopAnt();
 	void randAnt(float i);
 	void move();
+	void kill(float px, float py);
 
 	float getX(){return x;}
 	float getY(){return y;}

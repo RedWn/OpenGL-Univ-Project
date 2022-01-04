@@ -1,16 +1,32 @@
-﻿Build started 2021-12-29 3:12:29 PM.
+﻿Build started 2022-01-04 6:49:31 PM.
      1>Project "C:\Users\ASUS\documents\visual studio 2012\Projects\test2\test2\test2.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         D:\Prog\Visual Studio\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt ant.cpp
-         ant.cpp
+         D:\Prog\Visual Studio\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt CPU.cpp
+         CPU.cpp
+     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\cpu.h(33): warning C4244: 'return' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\cpu.cpp(3): warning C4305: 'initializing' : truncation from 'double' to 'float'
+     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\cpu.cpp(12): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\cpu.cpp(14): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\cpu.cpp(16): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\cpu.cpp(18): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\cpu.cpp(162): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\cpu.cpp(191): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\cpu.cpp(226): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\cpu.cpp(229): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\cpu.cpp(241): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\cpu.cpp(242): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\asus\documents\visual studio 2012\projects\test2\test2\cpu.cpp(243): warning C4305: 'argument' : truncation from 'double' to 'float'
        Link:
-         D:\Prog\Visual Studio\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ASUS\documents\visual studio 2012\Projects\test2\Debug\test2.exe" /INCREMENTAL /NOLOGO GLAUX.lib GLU32.lib glut.lib OPENGL32.lib glut32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\ASUS\documents\visual studio 2012\Projects\test2\Debug\test2.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ASUS\documents\visual studio 2012\Projects\test2\Debug\test2.lib" /MACHINE:X86 Debug\ant.obj
+         D:\Prog\Visual Studio\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ASUS\documents\visual studio 2012\Projects\test2\Debug\test2.exe" /INCREMENTAL /NOLOGO GLAUX.lib GLU32.lib glut.lib OPENGL32.lib glut32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\ASUS\documents\visual studio 2012\Projects\test2\Debug\test2.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ASUS\documents\visual studio 2012\Projects\test2\Debug\test2.lib" /MACHINE:X86 Debug\3DTexture.obj
+         Debug\ant.obj
+         Debug\camera.obj
          Debug\CPU.obj
          Debug\Light.obj
+         Debug\Model_3DS.obj
          Debug\Source.obj
          test2.vcxproj -> C:\Users\ASUS\documents\visual studio 2012\Projects\test2\Debug\test2.exe
      1>Done Building Project "C:\Users\ASUS\documents\visual studio 2012\Projects\test2\test2\test2.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:10.97
+Time Elapsed 00:00:04.35

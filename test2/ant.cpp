@@ -13,6 +13,12 @@ void Ant::randAnt(float i){
 	dx = (rand()%5 - 2) * i;
 	dy = (rand()%5 - 2) * i;
 }
+
+void Ant::kill(float px, float py){
+	if (px - x < 1 && py - y < 1){
+		
+	}
+}
 void Ant::move(){
 	x+=dx;
 	y+=dy;

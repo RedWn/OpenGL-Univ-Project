@@ -1,4 +1,4 @@
-#include <windows.h>	// Header File For Windows
+#include <windows.h>		// Header File For Windows
 #include <stdio.h>
 #include <gl\gl.h>			// Header File For The OpenGL32 Library
 #include <gl\glu.h>			// Header File For The GLu32 Library
@@ -6,6 +6,7 @@
 #include "ant.h"
 #include "CPU.h"
 #include "Light.h"
+#include "camera.h"
 
 HDC			hDC=NULL;		// Private GDI Device Context
 HGLRC		hRC=NULL;		// Permanent Rendering Context
@@ -111,27 +112,41 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
 	glEnable(GL_TEXTURE_2D);
-	tex[0] = LoadTexture("rxr.bmp",100);
-	tex[1] = LoadTexture("down.bmp",100);
-	tex[2] = LoadTexture("wall.bmp",100);
+	tex[0] = LoadTexture("assets/rxr.bmp",100);
+	tex[1] = LoadTexture("assets/down.bmp",100);
+	tex[2] = LoadTexture("assets/wall.bmp",100);
+	tex[3] = LoadTexture("assets/blade.bmp",100);
+
 
 	return TRUE;										// Initialization Went OK
 }
-float rot=0,A=0.1;
-float playerX=1010,playerY=1010,playerZ=0.2,Diff=0,Diff2=0,cameraX=0,cameraY=0,cameraZ=0;
 
+float playerX=1010,playerY=1010,playerZ=0.2f,Diff=0,Diff2=0,Diff3=0,cameraX=0,cameraY=0,cameraZ=0;
+CPU cpu = CPU(1010,1010,0.2,0,0,0,0,0,tex);
+
+void drawSquare(float x, float y, float z, float r, float g, float b){
+	glDisable(GL_TEXTURE_2D);
+	glColor3f(r,g,b);
+	glBegin(GL_QUADS);
+	glVertex3f(x,y,z+1);
+	glVertex3f(x+1,y,z-1);
+	glVertex3f(x+1,y,z+1);
+	glVertex3f(x,y,z+1);
+	glEnd();
+	glEnable(GL_TEXTURE_2D);
+}
 
 void cameraMovement(){
 	if (keys['W']){
-		playerX += 1 * cos(Diff * 3.1415 / 180); 
-		playerY += 1 * sin(Diff * 3.1415 / 180);
+		playerX += 0.1 * cos(Diff * 3.1415 / 180); 
+		playerY += 0.1 * sin(Diff * 3.1415 / 180);
 	}	
 	if (keys['S']){
-		playerX -= 1 * cos(Diff * 3.1415 / 180); 
-		playerY -= 1 * sin(Diff * 3.1415 / 180);
+		playerX -= 0.1 * cos(Diff * 3.1415 / 180); 
+		playerY -= 0.1 * sin(Diff * 3.1415 / 180);
 	}
 	if (keys['D']){
-		playerX -= 1 * sin(Diff * 3.1415 / 180);
+		playerX -= 0.1 * sin(Diff * 3.1415 / 180);
 		playerY -= 1 * cos(Diff * 3.1415 / 180);
 	}
 	if (keys['A']){
@@ -145,36 +160,51 @@ void cameraMovement(){
 		Diff -= 5;
 	}
 	if (keys[VK_UP]){
-		Diff2 += 5;
+		Diff2++;
 	}
 	if (keys[VK_DOWN]){
-		Diff2 -= 5;
+		Diff2--;
 	}
 	if (keys['I']){
 		if (playerZ < 10){
 			playerZ = 10;
-		}else if (playerZ > 0.2){
-			playerZ = 0.2;
+		}else if (playerZ > 0.2f){
+			playerZ = 0.2f;
 		}
+	}
+	if (playerX - 1019 > 0){
+		playerX = 1019;
+	}
+	if (playerY - 1019 > 0){
+		playerY = 1019;
+	}
+	if (playerX - 1001 < 0){
+		playerX = 1001;
+	}
+	if (playerY - 1001 < 0){
+		playerY = 1001;
 	}
 	cameraX = playerX + 5 * cos(Diff * 3.1415 / 180);
 	cameraY = playerY + 5 * sin(Diff * 3.1415 / 180);
-	cameraZ = playerZ + 5 * sin(Diff2 * 3.1415 / 180);
+	cameraZ = playerZ + Diff2; // sin(Diff2 * 3.1415 / 180);
 	gluLookAt(playerX,playerY,playerZ,cameraX,cameraY,cameraZ,0,0,1);
+
 }
 
 void keyer(){
 	if (keys['B']){
 		glDisable(GL_LIGHTING);
 	}
+	if(keys[VK_SPACE]){
+		cpu.checkAnt(playerX,playerY);
+	}
 	if(keys['E']){
-			CPU::dA(0.1);
+			CPU::dA(0.1f);
 		}
-		if(keys['Q']){
-			CPU::dA(-0.1);
-		}
+	if(keys['Q']){
+		CPU::dA(-0.1f);
+	}
 }
-
 
 
 void DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
@@ -189,9 +219,14 @@ void DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 
 	keyer();
 	light.lightManager(1010,1010,10);
-	CPU cpu = CPU(1010,1010,0.2,0,0,0,0,0,tex);
-	//CPUroom();
+		
 
+	cpu.CPUroom();
+
+	if (cpu.antNum == 5){
+		drawSquare(cameraX,cameraX,cameraX,1,0,0);
+	}
+	
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	
@@ -511,7 +546,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 
 
 	//Set drawing timer to 20 frame per second
-	UINT timer=SetTimer(hWnd,0,50,(TIMERPROC) NULL);
+	UINT timer=SetTimer(hWnd,0,20,(TIMERPROC) NULL);
 
 	while (GetMessage(&msg, NULL, 0, 0)) 
 	{

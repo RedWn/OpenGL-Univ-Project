@@ -143,49 +143,6 @@ void CPU::skybox(float x,float y,float z,float d,float dz){
 	glVertex3f(x+d,y,z+dz);
 	glEnd();
 }
-
-/*void CPU::cameraMovement(){
-	if (keys['W']){
-		playerX += 1 * cos(Diff * 3.1415 / 180); 
-		playerY += 1 * sin(Diff * 3.1415 / 180);
-	}
-	if (keys['S']){
-		playerX -= 1 * cos(Diff * 3.1415 / 180); 
-		playerY -= 1 * sin(Diff * 3.1415 / 180);
-	}
-	if (keys['D']){
-		playerX -= 1 * sin(Diff * 3.1415 / 180);
-		playerY -= 1 * cos(Diff * 3.1415 / 180);
-	}
-	if (keys['A']){
-		playerX += 1 * sin(Diff * 3.1415 / 180); 
-		playerY += 1 * cos(Diff * 3.1415 / 180);
-	}
-	if (keys[VK_LEFT]){
-		Diff += 5;
-	}
-	if (keys[VK_RIGHT]){
-		Diff -= 5;
-	}
-	if (keys[VK_UP]){
-		Diff2 += 5;
-	}
-	if (keys[VK_DOWN]){
-		Diff2 -= 5;
-	}
-	if (keys['I']){
-		if (playerZ < 10){
-			playerZ = 10;
-		}else if (playerZ > 0.2){
-			playerZ = 0.2;
-		}
-	}
-	cameraX = playerX + 5 * cos(Diff * 3.1415 / 180);
-	cameraY = playerY + 5 * sin(Diff * 3.1415 / 180);
-	cameraZ = playerZ + 5 * sin(Diff2 * 3.1415 / 180);
-	gluLookAt(playerX,playerY,playerZ,cameraX,cameraY,cameraZ,0,0,1);
-}
-*/
 void CPU::drawCircle(float x, float y, float z, float r){
 	float dx=0,dy=0;
 	glBegin(GL_TRIANGLE_FAN);
@@ -216,7 +173,7 @@ void CPU::drawFan(float x, float y, float z){
 			A=0;
 		rot += A;
 		glDisable(GL_TEXTURE_2D);
-		glColor3f(0.5,0.5,0.5);
+		glColor3f(0.2f,0.2f,0.3f);
 		glBegin(GL_QUADS);
 		glVertex3f(x,y,z+1);
 		glVertex3f(x+2,y,z-1);
@@ -233,36 +190,45 @@ void CPU::drawBlades(float x,float y,float z){
 		glTranslatef(x,y,z);
 		glRotatef(i,0,0,1);
 		glTranslatef(-x,-y,-z);
-		glDisable(GL_TEXTURE_2D);
 		glColor3f(1,1,1);
+		glBindTexture(GL_TEXTURE_2D,tex[3]);
 		glBegin(GL_QUADS);
+		glTexCoord2d(0, 0);
 		glVertex3f(x,y+5,z);
+		glTexCoord2d(0, 1);
 		glVertex3f(x,y+9,z);
+		glTexCoord2d(1, 1);
 		glVertex3f(x,y+9,z-10);
+		glTexCoord2d(1, 0);
 		glVertex3f(x,y+5,z-10);
 		glEnd();
-		glEnable(GL_TEXTURE_2D);
 		glPopMatrix();
 	}
 }
 void CPU::drawAnt(float x, float y,float z){
-	drawCube(x,y,z,0.2,0.2,0.2);
-	drawCube(x+0.05,y+0.2,z+0.05,0.1,0.1,0.1);
-	drawCube(x,y+0.3,z,0.2,0.3,0.2);
+	ant = Model_3DS();
+	char* s = (char*)"assets/ant2.3ds";
+	ant.Load(s);
+	ant.pos.x = x;
+	ant.pos.y = y;
+	ant.pos.z = z;
+	ant.Draw();
+}
+void CPU::checkAnt(float x, float y){
+	for (int i=0;i<antNum;i++){
+		if ((abs(x - antsX.at(i)) < 0.1) && (abs(y - antsY.at(i)) < 0.1)){
+			ants.erase(ants.begin()+i);
+		}
+	}
 }
 void CPU::theANTs(int n){
 	for (int i=0;i<n;i++){
-		ants[i].randAnt(0.1);
+		ants[i].randAnt(0.01);
 	}
 	for (int i=0;i<n;i++){
 		drawAnt(ants[i].getX(), ants[i].getY(), 0.09);
 	}
-	moveAnts(antNum);
-}
-void CPU::moveAnts(int n){
-	for (int i=0;i<n;i++){
-		ants[i].move();
-	}
+	//moveAnts(antNum);
 }
 void CPU::CPUroom(){
 	drawGround(1000,1000,0,20);
@@ -272,17 +238,19 @@ void CPU::CPUroom(){
 	theANTs(antNum);
 }
 void CPU::addAnt(){
-	ants.push_back(Ant(1000+rand()%20,1000+rand()%20,0.2));
+	float x = 1001+rand()%17;
+	float y = 1001+rand()%17;
+	ants.push_back(Ant(x,y,0.1));
+	antsX.push_back(x);
+	antsY.push_back(y);
 }
-CPU::CPU(float x, float y, float z, float d, float d2, float cx, float cy, float cz,int t[10]){
-	for(int i=0;i<3;i++)
-		tex[i]=t[i];
+CPU::CPU(float x, float y, float z, float d, float d2, float cx, float cy, float cz,int* t){
+	tex =t;
 	antNum = 5;
-	//TODO FIX THIS
 	for (int i =0;i<antNum;i++){
 		addAnt();
 	}
 	playerX=x,playerY=y,playerZ=z,Diff=d,Diff2=d2 ,cameraX=cx ,cameraY=cy ,cameraZ=cz;
-	CPUroom();
+	//CPUroom();
 
 }

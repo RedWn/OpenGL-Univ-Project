@@ -63,15 +63,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="3DTexture.cpp" />
     <ClCompile Include="ant.cpp" />
+    <ClCompile Include="camera.cpp" />
     <ClCompile Include="CPU.cpp" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Model_3DS.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="3DTexture.h" />
     <ClInclude Include="ant.h" />
+    <ClInclude Include="camera.h" />
     <ClInclude Include="CPU.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="Model_3DS.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
