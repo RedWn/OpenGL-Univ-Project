@@ -1,7 +1,7 @@
 #include "CPU.h"
 
 float CPU::A = 0.1;
-float CPU::rot = 0;
+float CPU::rot = 81;
 
 
 void CPU::drawGround(int x,int y,int z,int d){
@@ -18,80 +18,6 @@ void CPU::drawGround(int x,int y,int z,int d){
 	glVertex3f(x,y+d,z);
 	glEnd();
 
-}
-void CPU::drawCube(float x,float y,float z,float dx,float dy,float dz){
-
-	glBindTexture(GL_TEXTURE_2D,tex[0]);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3f(x,y+dy,z);
-	glTexCoord2d(1, 0);
-	glVertex3f(x+dx,y+dy,z);
-	glTexCoord2d(1, 1);
-	glVertex3f(x+dx,y+dy,z+dz);
-	glTexCoord2d(0, 1);
-	glVertex3f(x,y+dy,z+dz);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D,tex[0]);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3f(x,y,z);
-	glTexCoord2d(1, 0);
-	glVertex3f(x+dx,y,z);
-	glTexCoord2d(1, 1);
-	glVertex3f(x+dx,y+dy,z);
-	glTexCoord2d(0, 1);
-	glVertex3f(x,y+dy,z);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D,tex[0]);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3f(x,y,z+dz);
-	glTexCoord2d(1, 0);
-	glVertex3f(x+dx,y,z+dz);
-	glTexCoord2d(1, 1);
-	glVertex3f(x+dx,y+dy,z+dz);
-	glTexCoord2d(0, 1);
-	glVertex3f(x,y+dy,z+dz);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D,tex[0]);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3f(x,y,z);
-	glTexCoord2d(1, 0);
-	glVertex3f(x+dx,y,z);
-	glTexCoord2d(1, 1);
-	glVertex3f(x+dx,y,z+dz);
-	glTexCoord2d(0, 1);
-	glVertex3f(x,y,z+dz);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D,tex[0]);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3f(x,y,z);
-	glTexCoord2d(1, 0);
-	glVertex3f(x,y+dy,z);
-	glTexCoord2d(1, 1);
-	glVertex3f(x,y+dy,z+dz);
-	glTexCoord2d(0, 1);
-	glVertex3f(x,y,z+dz);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D,tex[0]);
-	glBegin(GL_QUADS);
-	glTexCoord2d(0, 0);
-	glVertex3f(x+dx,y,z);
-	glTexCoord2d(1, 0);
-	glVertex3f(x+dx,y+dy,z);
-	glTexCoord2d(1, 1);
-	glVertex3f(x+dx,y+dy,z+dz);
-	glTexCoord2d(0, 1);
-	glVertex3f(x+dx,y,z+dz);
-	glEnd();
 }
 void CPU::skybox(float x,float y,float z,float d,float dz){
 
@@ -158,10 +84,9 @@ void CPU::drawCircle(float x, float y, float z, float r){
 void CPU::drawFan(float x, float y, float z){
 	glTranslatef(1010,1010,9);
 	glDisable(GL_TEXTURE_2D);
-	glColor3f(0.5,0.5,0.5);
-	for (float i=0;i<2;i+=0.01){
-	drawCircle(0,0,i,2);
-	}
+	//for (float i=0;i<2;i+=0.01){
+	drawCircle(0,0,0,2);
+	//}
 	glEnable(GL_TEXTURE_2D);
 	glTranslatef(-1010,-1010,-9);
 	for (int i = 0; i < 360; i += 60){
@@ -173,7 +98,6 @@ void CPU::drawFan(float x, float y, float z){
 			A=0;
 		rot += A;
 		glDisable(GL_TEXTURE_2D);
-		glColor3f(0.2f,0.2f,0.3f);
 		glBegin(GL_QUADS);
 		glVertex3f(x,y,z+1);
 		glVertex3f(x+2,y,z-1);
@@ -215,20 +139,30 @@ void CPU::drawAnt(float x, float y,float z){
 	ant.Draw();
 }
 void CPU::checkAnt(float x, float y){
-	for (int i=0;i<antNum;i++){
-		if ((abs(x - antsX.at(i)) < 0.1) && (abs(y - antsY.at(i)) < 0.1)){
-			ants.erase(ants.begin()+i);
+	std::vector<std::vector<Ant>::iterator> ants2;
+	for (Ant a: ants){
+		if ((abs(x - a.x) < 0.2) && (abs(y - a.y) < 0.2)){
+			for (std::vector<Ant>::iterator antIterator = ants.begin(); antIterator != ants.end(); antIterator++) {
+				if (antIterator->id == a.id){
+					ants2.push_back(antIterator);
+					break;
+				}
+			}
 		}
 	}
+	for (auto it : ants2){
+	ants.erase(it);
+	kill++;
+	}
+
 }
 void CPU::theANTs(int n){
-	for (int i=0;i<n;i++){
-		ants[i].randAnt(0.01);
+	for (Ant a: ants){
+		a.randAnt(0.01);
 	}
-	for (int i=0;i<n;i++){
-		drawAnt(ants[i].getX(), ants[i].getY(), 0.09);
+	for (Ant a: ants){
+		drawAnt(a.getX(), a.getY(), 0.09);
 	}
-	//moveAnts(antNum);
 }
 void CPU::CPUroom(){
 	drawGround(1000,1000,0,20);
@@ -237,20 +171,14 @@ void CPU::CPUroom(){
 	drawBlades(1010,1010,8);
 	theANTs(antNum);
 }
-void CPU::addAnt(){
-	float x = 1001+rand()%17;
-	float y = 1001+rand()%17;
-	ants.push_back(Ant(x,y,0.1));
-	antsX.push_back(x);
-	antsY.push_back(y);
+void CPU::addAnt(int i){
+	ants.push_back(Ant(1001+rand()%17,1001+rand()%17,0.1,i));
 }
-CPU::CPU(float x, float y, float z, float d, float d2, float cx, float cy, float cz,int* t){
+CPU::CPU(int* t){
+	kill=0;
 	tex =t;
 	antNum = 5;
 	for (int i =0;i<antNum;i++){
-		addAnt();
+		addAnt(i * 10);
 	}
-	playerX=x,playerY=y,playerZ=z,Diff=d,Diff2=d2 ,cameraX=cx ,cameraY=cy ,cameraZ=cz;
-	//CPUroom();
-
 }

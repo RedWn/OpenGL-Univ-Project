@@ -3,15 +3,17 @@
 #include <iostream>
 class Ant {
 private:
+	
+
+public:
+	int id;
 	float x;
 	float dx;
 	float y;
 	float dy;
 	float z;
 	float dz;
-
-public:
-	Ant(float xx, float yy, float zz);
+	Ant(float xx, float yy, float zz, int idd);
 	void stopAnt();
 	void randAnt(float i);
 	void move();

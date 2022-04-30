@@ -9,6 +9,7 @@ class Light
 
 {
 public:
+	int level;
 	void lightManager(float x, float y, float z);
 	void ResetLightPosition(float x, float y, float z);
 	void ResetLightColor(float r, float g, float b);
@@ -16,5 +17,5 @@ public:
 	Light();
 
 private:
-
+	
 };

@@ -5,8 +5,11 @@
 #include <cmath>
 #include "ant.h"
 #include "CPU.h"
+#include "DVD.h"
+#include "RAM.h"
+#include "Motherboard.h"
+#include "Power.h"
 #include "Light.h"
-#include "camera.h"
 
 HDC			hDC=NULL;		// Private GDI Device Context
 HGLRC		hRC=NULL;		// Permanent Rendering Context
@@ -100,8 +103,9 @@ int LoadTexture(const char *filename,int alpha)
     return (num_texture); // Returns the current texture OpenGL ID
 }
 int test,ground,wall;
-int tex[10];
+int tex1[10],tex2[10],tex3[10],tex4[10];
 Light light = Light();
+Model_3DS motherboard;
 
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
@@ -112,17 +116,41 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
 	glEnable(GL_TEXTURE_2D);
-	tex[0] = LoadTexture("assets/rxr.bmp",100);
-	tex[1] = LoadTexture("assets/down.bmp",100);
-	tex[2] = LoadTexture("assets/wall.bmp",100);
-	tex[3] = LoadTexture("assets/blade.bmp",100);
+	tex1[0] = LoadTexture("assets/rxr.bmp",100);
+	tex1[1] = LoadTexture("assets/down.bmp",100);
+	tex1[2] = LoadTexture("assets/wall.bmp",100);
+	tex1[3] = LoadTexture("assets/blade.bmp",100);
+	
+	tex2[0] = LoadTexture("assets/down.bmp",100);
+	tex2[1] = LoadTexture("assets/wall.bmp",100);
+	tex2[2] = LoadTexture("assets/ram.bmp",100);
+	tex2[3] = LoadTexture("assets/ram_rout.bmp",100);
+	tex2[4] = LoadTexture("assets/ram_ic.bmp",100);
+	tex2[5] = LoadTexture("assets/up.bmp",100);
 
+	tex3[0] = LoadTexture("assets/rxr.bmp",100);
+	tex3[1] = LoadTexture("assets/1.bmp",100);
+	tex3[2] = LoadTexture("assets/2.bmp",100);
+
+	tex4[0] = LoadTexture("assets/dvdUp.bmp", 100);
+	tex4[1] = LoadTexture("assets/dvdfront.bmp", 100);
+	tex4[2] = LoadTexture("assets/dvdSide.bmp", 100);
+
+	motherboard = Model_3DS();
+	motherboard.Load("assets/mainboard.3ds");
+	motherboard.Materials[0].tex.LoadBMP("assets/p4sba-mb.bmp");
+	motherboard.Materials[1].tex.LoadBMP("assets/mb-ps-2.bmp");
 
 	return TRUE;										// Initialization Went OK
 }
 
 float playerX=1010,playerY=1010,playerZ=0.2f,Diff=0,Diff2=0,Diff3=0,cameraX=0,cameraY=0,cameraZ=0;
-CPU cpu = CPU(1010,1010,0.2,0,0,0,0,0,tex);
+CPU cpu = CPU(tex1);
+RAM ram = RAM(tex2);
+Power pwr = Power(tex3);
+DVD dvd = DVD(tex4);
+Motherboard mth = Motherboard(tex1);
+
 
 void drawSquare(float x, float y, float z, float r, float g, float b){
 	glDisable(GL_TEXTURE_2D);
@@ -138,7 +166,7 @@ void drawSquare(float x, float y, float z, float r, float g, float b){
 
 void cameraMovement(){
 	if (keys['W']){
-		playerX += 0.1 * cos(Diff * 3.1415 / 180); 
+		playerX += 0.2 * cos(Diff * 3.1415 / 180); 
 		playerY += 0.1 * sin(Diff * 3.1415 / 180);
 	}	
 	if (keys['S']){
@@ -166,11 +194,10 @@ void cameraMovement(){
 		Diff2--;
 	}
 	if (keys['I']){
-		if (playerZ < 10){
-			playerZ = 10;
-		}else if (playerZ > 0.2f){
-			playerZ = 0.2f;
-		}
+			playerZ++;
+	}
+	if (keys['K']){
+			playerZ--;
 	}
 	if (playerX - 1019 > 0){
 		playerX = 1019;
@@ -190,13 +217,14 @@ void cameraMovement(){
 	gluLookAt(playerX,playerY,playerZ,cameraX,cameraY,cameraZ,0,0,1);
 
 }
-
+int level = 1;
 void keyer(){
-	if (keys['B']){
-		glDisable(GL_LIGHTING);
-	}
 	if(keys[VK_SPACE]){
 		cpu.checkAnt(playerX,playerY);
+		ram.checkAnt(playerX,playerY);
+		pwr.checkAnt(playerX,playerY);
+		dvd.checkAnt(playerX,playerY);
+		mth.checkAnt(playerX,playerY);
 	}
 	if(keys['E']){
 			CPU::dA(0.1f);
@@ -204,12 +232,33 @@ void keyer(){
 	if(keys['Q']){
 		CPU::dA(-0.1f);
 	}
+	if(keys['1']){
+		light.level = 1;
+		level = 1;
+	}
+	if(keys['2'] || cpu.kill==cpu.antNum){
+		light.level = 2;
+		level = 2;
+	}
+	if(keys['3'] || ram.kill==ram.antNum){
+		light.level = 3;
+		level = 3;
+	}
+	if(keys['4'] || dvd.kill==dvd.antNum){
+		light.level = 4;
+		level = 4;
+	}
+	if(keys['5'] || pwr.kill==pwr.antNum){
+		light.level = 5;
+		level = 5;
+	}
 }
 
 
 void DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {
-
+	if (keys['B'])
+		glDisable(GL_LIGHTING);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 	glLoadIdentity();									// Reset The Current Modelview Matrix
 	
@@ -219,9 +268,41 @@ void DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 
 	keyer();
 	light.lightManager(1010,1010,10);
-		
 
-	cpu.CPUroom();
+	switch (level)
+	{
+	case 1:
+		glEnable(GL_LIGHTING);
+		cpu.CPUroom();
+		break;
+	case 2:
+		glEnable(GL_LIGHTING);
+		ram.RAMroom();
+		break;
+	case 3:
+		glDisable(GL_LIGHTING);
+		dvd.DVDroom();
+		break;
+	case 4:
+		glEnable(GL_LIGHTING);
+		pwr.Powerroom();
+		break;
+	case 5:
+		motherboard.pos.x = 990;
+		motherboard.pos.y = 1005;
+		motherboard.pos.z = 0;
+		glPushMatrix();
+		glTranslatef(1000,1000,-5);
+		glRotatef(90,1,0,0);
+		glTranslatef(-1000,-1000,5);
+		motherboard.Draw();
+		glPopMatrix();
+		mth.theANTs(5);
+		break;
+	default:
+		break;
+	}
+	
 
 	if (cpu.antNum == 5){
 		drawSquare(cameraX,cameraX,cameraX,1,0,0);

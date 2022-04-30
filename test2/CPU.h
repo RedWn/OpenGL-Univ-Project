@@ -12,24 +12,14 @@ class CPU
 {
 private:
 	std::vector<Ant> ants;
-	std::vector<float> antsX;
-	std::vector<float> antsY;
 	Model_3DS ant;
-	float playerX;
-	float playerY;
-	float playerZ;
-	float Diff;
-	float Diff2;
-	float cameraX;
-	float cameraY;
-	float cameraZ;
 	int* tex;
 
 public:
-	int antNum;
+	int antNum,kill;
 	static float rot;
 	static float A;
-	CPU(float x, float y, float z, float d, float d2, float cx, float cy, float cz,int tex[]);
+	CPU(int tex[]);
 	static int getRot() {return rot;}
 	static float getA() {return A;}
 	static void dA(float a) {A += a;}
@@ -37,7 +27,7 @@ public:
 	void drawCube(float x,float y,float z,float dx,float dy,float dz);
 	void skybox(float x,float y,float z,float d,float dz);
 	void cameraMovement();
-	void addAnt();
+	void addAnt(int i);
 	void drawCircle(float x, float y, float z, float r);
 	void drawFan(float x, float y, float z);
 	void drawBlades(float x,float y,float z);

@@ -40,7 +40,7 @@ void Light::lightManager(float x, float y, float z){
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	ResetLightColor(1,1,1);
-	if ((int)CPU::getRot()%60 < 20){
+	if ((int)CPU::getRot()%60 < 20 && level == 1){
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuseL);
 	}else{
 		glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuseH);
@@ -51,5 +51,6 @@ void Light::lightManager(float x, float y, float z){
 }
 
 Light::Light(){
+	level = 1;
 	SetupSceneLight();
 }

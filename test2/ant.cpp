@@ -1,6 +1,7 @@
 #include "ant.h"
 
-Ant::Ant(float xx, float yy, float zz){
+Ant::Ant(float xx, float yy, float zz, int idd){
+	idd = id;
 	x = xx;
 	y = yy;
 	z = zz;
@@ -14,11 +15,6 @@ void Ant::randAnt(float i){
 	dy = (rand()%5 - 2) * i;
 }
 
-void Ant::kill(float px, float py){
-	if (px - x < 1 && py - y < 1){
-		
-	}
-}
 void Ant::move(){
 	x+=dx;
 	y+=dy;
